@@ -161,6 +161,13 @@ void rk_meta_process(void)
 	/* trigger software irq to hpmcu that means meta was ready */
 	writel(0x00080008, GRF_SYS_BASE + GRF_SYS_HPMCU_CACHE_MISC);
 }
+
+void spl_rk_board_prepare_for_jump(struct spl_image_info *spl_image)
+{
+	/* reset hpmcu released by maskrom if next stage is U-Boot. */
+	if (spl_image->next_stage == SPL_NEXT_STAGE_UBOOT)
+		writel(0xf000f0, PERI_CRU_BASE + PERICRU_PERISOFTRST_CON10);
+}
 #endif
 
 #ifndef CONFIG_TPL_BUILD
