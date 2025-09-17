@@ -273,27 +273,6 @@ static int mmc_dm_reinit(void)
 	return 0;
 }
 
-/* Check by property: "/compatible" */
-static int dtb_check_ok(void *kfdt, void *ufdt)
-{
-	const char *compat;
-	int index;
-
-	/* TODO */
-	return 1;
-
-	for (index = 0;
-	     compat = fdt_stringlist_get(ufdt, 0, "compatible",
-					 index, NULL), compat;
-	     index++) {
-		debug("u-compat: %s\n", compat);
-		if (!fdt_node_check_compatible(kfdt, 0, compat))
-			return 1;
-	}
-
-	return 0;
-}
-
 int init_kernel_dtb(void)
 {
 #ifndef CONFIG_USING_KERNEL_DTB_V2
@@ -322,25 +301,14 @@ int init_kernel_dtb(void)
 	goto dtb_embed;
 #endif
 	ret = rockchip_read_dtb_file((void *)fdt_addr);
-	if (!ret) {
-		if (!dtb_check_ok((void *)fdt_addr, (void *)gd->fdt_blob)) {
-			ret = -EINVAL;
-			printf("Kernel dtb mismatch this platform!\n");
-		} else {
-			goto dtb_okay;
-		}
-	}
+	if (!ret)
+		goto dtb_okay;
 
 #ifdef CONFIG_EMBED_KERNEL_DTB
 #ifdef CONFIG_EMBED_KERNEL_DTB_ALWAYS
 dtb_embed:
 #endif
 	if (gd->fdt_blob_kern) {
-		if (!dtb_check_ok((void *)gd->fdt_blob_kern, (void *)gd->fdt_blob)) {
-			printf("Embedded kernel dtb mismatch this platform!\n");
-			return -EINVAL;
-		}
-
 		fdt_addr = (ulong)memalign(ARCH_DMA_MINALIGN,
 				fdt_totalsize(gd->fdt_blob_kern));
 		if (!fdt_addr)
