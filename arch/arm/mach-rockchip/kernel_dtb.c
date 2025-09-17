@@ -273,6 +273,41 @@ static int mmc_dm_reinit(void)
 	return 0;
 }
 
+#ifdef CONFIG_EMBED_KERNEL_DTB
+static void *embedded_kdtb(void)
+{
+	const void *fdt_blob_kern = gd->fdt_blob_kern;
+	void *fdt_addr;
+
+	printf("Embed: %s\n", CONFIG_EMBED_KERNEL_DTB_PATH);
+
+	/*
+	 * Alloc another space for this embed kernel dtb.
+	 * Because "fdt_addr_r" *MUST* be the fdt passed to kernel.
+	 */
+	fdt_addr = memalign(ARCH_DMA_MINALIGN, SZ_512K);
+	if (!fdt_addr)
+		return NULL;
+
+	/* dtb file ? */
+	if (!fdt_check_header(fdt_blob_kern)) {
+		memcpy(fdt_addr, fdt_blob_kern, fdt_totalsize(fdt_blob_kern));
+	} else {
+		/* resource file ? */
+		rockchip_read_ram_resource_dtb((void *)fdt_blob_kern, fdt_addr);
+	}
+
+	if (!fdt_check_header(fdt_addr)) {
+		printf("Embed kfdt: 0x%08lx\n", (ulong)fdt_addr);
+		return fdt_addr;
+	}
+
+	free(fdt_addr);
+
+	return NULL;
+}
+#endif
+
 int init_kernel_dtb(void)
 {
 #ifndef CONFIG_USING_KERNEL_DTB_V2
@@ -308,22 +343,11 @@ int init_kernel_dtb(void)
 #ifdef CONFIG_EMBED_KERNEL_DTB_ALWAYS
 dtb_embed:
 #endif
-	if (gd->fdt_blob_kern) {
-		fdt_addr = (ulong)memalign(ARCH_DMA_MINALIGN,
-				fdt_totalsize(gd->fdt_blob_kern));
-		if (!fdt_addr)
-			return -ENOMEM;
-
-		/*
-		 * Alloc another space for this embed kernel dtb.
-		 * Because "fdt_addr_r" *MUST* be the fdt passed to kernel.
-		 */
-		memcpy((void *)fdt_addr, gd->fdt_blob_kern,
-		       fdt_totalsize(gd->fdt_blob_kern));
-		printf("DTB: %s\n", CONFIG_EMBED_KERNEL_DTB_PATH);
-	} else
+	fdt_addr = (ulong)embedded_kdtb();
+	if (fdt_check_header((void *)fdt_addr))
 #endif
 	{
+		gd->fdt_blob_kern = NULL;
 		printf("Failed to get kernel dtb, ret=%d\n", ret);
 		return -ENOENT;
 	}
