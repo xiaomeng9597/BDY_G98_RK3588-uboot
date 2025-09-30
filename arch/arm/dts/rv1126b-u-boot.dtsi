@@ -229,6 +229,10 @@
 	u-boot,dm-spl;
 };
 
+&pcfg_pull_up_drv_level_2_75 {
+	u-boot,dm-spl;
+};
+
 &usb2phy {
 	u-boot,dm-pre-reloc;
 	status = "okay";
