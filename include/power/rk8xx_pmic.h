@@ -452,6 +452,7 @@ struct rk8xx_priv {
 	int not_save_power_en;
 	int sys_can_sd;
 	int buck5_feedback_dis;
+	int pwron_on_time;
 	int pwr_ctr[3];
 	u32 *shutdown_sequence;
 	u32 *vb_shutdown_sequence;

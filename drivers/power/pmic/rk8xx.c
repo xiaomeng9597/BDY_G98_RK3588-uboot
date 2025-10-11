@@ -710,6 +710,7 @@ static int rk8xx_ofdata_to_platdata(struct udevice *dev)
 	rk8xx->rst_fun = dev_read_u32_default(dev, "pmic-reset-func", 0);
 	/* buck5 external feedback resister disable */
 	rk8xx->buck5_feedback_dis = dev_read_bool(dev, "buck5-feedback-disable");
+	rk8xx->pwron_on_time = dev_read_bool(dev, "pwron-on-time-500ms");
 
 	rk8xx->pwr_ctr[0] = dev_read_u32_default(dev, "pwrctrl1_output", -1);
 	rk8xx->pwr_ctr[1] = dev_read_u32_default(dev, "pwrctrl2_output", -1);
@@ -953,6 +954,15 @@ static int rk8xx_probe(struct udevice *dev)
 			rk8xx_write(dev, RK817_POWER_EN_SAVE0, &value, 1);
 			value = (power_en2 & 0x0f) | ((power_en3 & 0x0f) << 4);
 			rk8xx_write(dev, RK817_POWER_EN_SAVE1, &value, 1);
+		}
+		if (priv->pwron_on_time) {
+			ret = rk8xx_read(dev, RK817_PWRON_KEY, &value, 1);
+			if (ret)
+				return ret;
+			value &= (~0x80);
+			ret = rk8xx_write(dev, RK817_PWRON_KEY, &value, 1);
+			if (ret)
+				return ret;
 		}
 		break;
 	default:
