@@ -95,7 +95,13 @@ int __weak spl_board_prepare_for_jump(struct spl_image_info *spl_image)
 	return 0;
 }
 
-/* Fix storages, like iomux  */
+/* Prepare storages, like iomux */
+__weak void spl_board_storages_prepare(struct spl_image_loader *loader)
+{
+	/* Nothing to do! */
+}
+
+/* Fix storages, like iomux */
 __weak void spl_board_storages_fixup(struct spl_image_loader *loader)
 {
 	/* Nothing to do! */
@@ -459,6 +465,8 @@ static int boot_from_devices(struct spl_image_info *spl_image,
 		else
 			puts("SPL: Unsupported Boot Device!\n");
 #endif
+		spl_board_storages_prepare(loader);
+
 		if (loader && !spl_load_image(spl_image, loader)) {
 			spl_image->boot_device = spl_boot_list[i];
 			return 0;
