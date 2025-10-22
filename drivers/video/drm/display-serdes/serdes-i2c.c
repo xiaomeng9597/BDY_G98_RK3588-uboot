@@ -16,10 +16,10 @@ static void serdes_i2c_init(struct serdes *serdes)
 	if (serdes->vpower_supply)
 		regulator_set_enable(serdes->vpower_supply, true);
 
-	if (dm_gpio_is_valid(&serdes->enable_gpio))
+	if (dm_gpio_is_valid(&serdes->enable_gpio)) {
 		dm_gpio_set_value(&serdes->enable_gpio, 1);
-
-	//mdelay(5);
+		mdelay(50);
+	}
 
 	//video_bridge_set_active(serdes->dev, true);
 
@@ -57,6 +57,12 @@ static int serdes_i2c_probe(struct udevice *dev)
 					   &serdes->vpower_supply);
 	if (ret && ret != -ENOENT)
 		SERDES_DBG_MFD("%s: Cannot get power supply: %d\n",
+			       __func__, ret);
+
+	ret = gpio_request_by_name(dev, "reset-gpios", 0,
+				   &serdes->reset_gpio, GPIOD_IS_OUT);
+	if (ret)
+		SERDES_DBG_MFD("%s: failed to get reset gpio: %d\n",
 			       __func__, ret);
 
 	ret = gpio_request_by_name(dev, "enable-gpios", 0,
