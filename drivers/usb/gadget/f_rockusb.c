@@ -608,6 +608,17 @@ static int rkusb_do_vs_write(struct fsg_common *common)
 							curlun->sense_data = SS_WRITE_ERROR;
 							return -EIO;
 						}
+					} else if (key_len == 4 && memcmp(data + 9, "iswd", 4) == 0) {
+						uint8_t value;
+						if (trusty_oem_otp_key_is_written(key_id, &value) != 0) {
+							printf("trusty_oem_otp_key_is_written error!\n");
+							common->phase_error = 1;
+							return -EIO;
+						}
+						if (value)
+							curlun->sense_data = 1;
+						else
+							curlun->sense_data = 0;
 					} else {
 						if (key_len != 16 && key_len != 24 && key_len != 32) {
 							printf("check oem otp key size fail!\n");
