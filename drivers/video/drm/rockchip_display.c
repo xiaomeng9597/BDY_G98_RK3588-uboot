@@ -174,7 +174,6 @@ int rockchip_get_baseparameter(void)
 		printf("warning: bad baseparameter\n");
 		memset(&base_parameter, 0, sizeof(base_parameter));
 	}
-	rockchip_display_make_crc32_table();
 
 out:
 	free(baseparameter_buf);
@@ -215,8 +214,7 @@ struct base2_disp_info *rockchip_get_disp_info(int type, int id)
 		return NULL;
 
 	if (base_parameter.major_version == 3 && base_parameter.minor_version == 0) {
-		crc_val = rockchip_display_crc32c_cal((unsigned char *)disp_info,
-						      sizeof(struct base2_disp_info) - 4);
+		crc_val = crc32(0, (unsigned char *)disp_info, sizeof(struct base2_disp_info) - 4);
 		if (crc_val != disp_info->crc2) {
 			printf("error: connector type[%d], id[%d] disp info crc2 check error\n",
 			       type, id);
@@ -225,7 +223,7 @@ struct base2_disp_info *rockchip_get_disp_info(int type, int id)
 	} else {
 		base2_length = sizeof(struct base2_disp_info) - sizeof(struct csc_info) -
 			       sizeof(struct acm_data) - 10 * 1024 - 4;
-		crc_val = rockchip_display_crc32c_cal((unsigned char *)disp_info, base2_length - 4);
+		crc_val = crc32(0, (unsigned char *)disp_info, base2_length - 4);
 		if (crc_val != disp_info->crc) {
 			printf("error: connector type[%d], id[%d] disp info crc check error\n",
 			       type, id);
