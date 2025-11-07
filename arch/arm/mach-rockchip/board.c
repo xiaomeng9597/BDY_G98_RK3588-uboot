@@ -489,7 +489,6 @@ int board_late_init(void)
 	rockchip_set_serialno();
 #endif
 	setup_download_mode();
-	scan_run_cmd();
 #ifdef CONFIG_ROCKCHIP_USB_BOOT
 	boot_from_udisk();
 #endif
@@ -516,6 +515,7 @@ int board_late_init(void)
 	env_fixup();
 	soc_clk_dump();
 	cmdline_handle();
+	scan_run_cmd();
 #ifdef CONFIG_AMP
 	amp_cpus_on();
 #endif
