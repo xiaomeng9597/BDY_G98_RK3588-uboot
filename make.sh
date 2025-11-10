@@ -754,11 +754,6 @@ function pack_fit_image()
 	if ! which dtc >/dev/null 2>&1 ; then
 		echo "ERROR: No 'dtc', please: apt-get install device-tree-compiler"
 		exit 1
-	elif [ "${ARM64_TRUSTZONE}" == "y" ]; then
-		if ! which python2 >/dev/null 2>&1 ; then
-			echo "ERROR: No python2"
-			exit 1
-		fi
 	fi
 
 	# If we don't plan to have uboot in uboot.img in case of: SPL => Trust => Kernel, creating empty files.
@@ -822,7 +817,7 @@ select_ini_file
 handle_args_late
 sub_commands
 clean_files
-make PYTHON=python2 ${ARG_SPL_FWVER} ${ARG_FWVER} CROSS_COMPILE=${TOOLCHAIN} all --jobs=${JOB}
+make ${ARG_SPL_FWVER} ${ARG_FWVER} CROSS_COMPILE=${TOOLCHAIN} all --jobs=${JOB}
 pack_images
 finish
 echo ${TOOLCHAIN}
