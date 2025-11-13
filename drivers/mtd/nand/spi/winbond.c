@@ -280,6 +280,15 @@ static const struct spinand_info winbond_spinand_table[] = {
 					      &update_cache_variants),
 		     0,
 		     SPINAND_ECCINFO(&w25n02kv_ooblayout, w25n02kv_ecc_get_status)),
+	SPINAND_INFO("W25N02JW2EIF",
+		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_DUMMY, 0xBF, 0x22),
+		     NAND_MEMORG(1, 2048, 64, 64, 2048, 1, 1, 1),
+		     NAND_ECCREQ(1, 512),
+		     SPINAND_INFO_OP_VARIANTS(&read_cache_variants,
+					      &write_cache_variants,
+					      &update_cache_variants),
+		     SPINAND_HAS_QE_BIT,
+		     SPINAND_ECCINFO(&w25m02gv_ooblayout, NULL)),
 };
 
 static int winbond_spinand_init(struct spinand_device *spinand)
@@ -299,9 +308,10 @@ static int winbond_spinand_init(struct spinand_device *spinand)
 
 	/* W25N01JWZEIG enable continuous read */
 #ifdef CONFIG_SPI_NAND_CONT_READ
-	if ((spinand->id.data[1] == 0xaa || spinand->id.data[1] == 0xba ||
+	if (((spinand->id.data[1] == 0xaa || spinand->id.data[1] == 0xba ||
 	     spinand->id.data[1] == 0xbc || spinand->id.data[1] == 0xbe) &&
-	     spinand->id.data[2] == 0x21) {
+	     spinand->id.data[2] == 0x21) ||
+	     (spinand->id.data[1] == 0xbf && spinand->id.data[2] == 0x22)) {
 #ifdef CONFIG_SPL_BUILD
 		spinand->support_cont_read = true;
 		spinand_upd_cfg(spinand, CFG_BUF_ENABLE, 0);
