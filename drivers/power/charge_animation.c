@@ -686,9 +686,9 @@ static int charge_animation_show(struct udevice *dev)
 
 /* Give a message warning when CONFIG_IRQ is not enabled */
 #ifdef CONFIG_IRQ
-	printf("Enter U-Boot charging mode\n");
-#else
 	printf("Enter U-Boot charging mode(IRQ)\n");
+#else
+	printf("Enter U-Boot charging mode\n");
 #endif
 
 	charge_start = get_timer(0);
