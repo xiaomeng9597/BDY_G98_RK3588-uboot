@@ -422,8 +422,8 @@ int arch_cpu_init(void)
 #elif defined(CONFIG_ROCKCHIP_SFC_IOMUX)
 	/*
 	 * (IF_TYPE_MTD, 0, 0) FSPI0
-	 * (IF_TYPE_MTD, 1, 0) FSPI1 M0
-	 * (IF_TYPE_MTD, 2, 0) FSPI1 M1
+	 * (IF_TYPE_MTD, 0, 1) FSPI1 M0
+	 * (IF_TYPE_MTD, 0, 2) FSPI1 M1
 	 */
 	board_set_iomux(IF_TYPE_MTD, 0, 0);
 #endif /* #if defined(CONFIG_ROCKCHIP_EMMC_IOMUX) */
