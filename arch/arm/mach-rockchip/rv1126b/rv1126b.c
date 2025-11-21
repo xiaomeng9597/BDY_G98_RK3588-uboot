@@ -225,7 +225,6 @@ void board_set_iomux(enum if_type if_type, int devnum, int routing)
 			/* FSPI0 M0 */
 			writel(0x0f0f0101, VCCIO1_IOC_BASE + GPIO1B_IOMUX_SEL_L);
 			writel(0xffff1111, VCCIO1_IOC_BASE + GPIO1B_IOMUX_SEL_H);
-			writel(0x00f00020, VCCIO1_IOC_BASE + GPIO1A_IOMUX_SEL_H);
 		} else if (routing == 1) {
 			/* FSPI1 M0 */
 			writel(0x0fff0111, PMUIO0_IOC_BASE + GPIO0B_IOMUX_SEL_L);
@@ -489,8 +488,8 @@ int arch_cpu_init(void)
 #elif defined(CONFIG_ROCKCHIP_SFC_IOMUX)
 	/*
 	 * (IF_TYPE_MTD, 0, 0) FSPI0
-	 * (IF_TYPE_MTD, 1, 0) FSPI1 M0
-	 * (IF_TYPE_MTD, 2, 0) FSPI1 M1
+	 * (IF_TYPE_MTD, 0, 1) FSPI1 M0
+	 * (IF_TYPE_MTD, 0, 2) FSPI1 M1
 	 */
 	board_set_iomux(IF_TYPE_MTD, 0, 0);
 #endif
