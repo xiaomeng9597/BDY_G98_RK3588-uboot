@@ -36,6 +36,9 @@
 #define CONFIG_SPL_BSS_MAX_SIZE		0x20000
 #define CONFIG_SPL_STACK		0x03de0000
 
+#define GICD_BASE			0x20411000
+#define GICC_BASE			0x20412000
+
 /* secure otp */
 #define OTP_UBOOT_ROLLBACK_OFFSET	0x350
 #define OTP_UBOOT_ROLLBACK_WORDS	2	/* 64 bits, 2 words */
