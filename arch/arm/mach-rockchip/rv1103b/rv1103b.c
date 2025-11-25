@@ -265,6 +265,22 @@ int rk_board_scan_bootdev(void)
 }
 #endif
 
+int fit_standalone_release(char *id, uintptr_t entry_point)
+{
+	if (!strcmp(id, "hpmcu")) {
+		/* reset hpmcu */
+		writel(0x00f000f0, PERI_CRU_BASE + PERICRU_PERISOFTRST_CON10);
+		writel(0x00080008, SGRF_SYS_BASE + SGRF_SYS_SOC_CON2);
+		/* set the hpmcu boot address */
+		writel(entry_point, SGRF_SYS_BASE + SGRF_SYS_HPMCU_BOOT_DDR);
+		writel(0x80000000, SGRF_SYS_BASE + SGRF_SYS_SOC_CON3);
+		/* release hpmcu */
+		writel(0x00f00000, PERI_CRU_BASE + PERICRU_PERISOFTRST_CON10);
+	}
+
+	return 0;
+}
+
 #if defined(CONFIG_ROCKCHIP_EMMC_IOMUX) && defined(CONFIG_ROCKCHIP_SFC_IOMUX)
 #error FSPI and eMMC iomux is incompatible for rv1103b Soc. You should close one of them.
 #endif
