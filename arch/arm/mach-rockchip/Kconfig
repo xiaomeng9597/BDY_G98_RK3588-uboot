@@ -633,6 +633,7 @@ config ROCKCHIP_RV1106
 	select CPU_V7
 	select DEBUG_UART_BOARD_INIT
 	select ARM_ERRATA_814220
+	imply ARM_SMCCC
 	imply SUPPORT_SPL
 	imply SUPPORT_TPL
 	imply SPL
