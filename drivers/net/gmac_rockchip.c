@@ -1707,7 +1707,7 @@ static void rk3576_set_to_rmii(struct gmac_rockchip_platdata *pdata)
 
 	enum {
 		RK3576_GMAC_RMII_MODE_MASK = BIT(3),
-		RK3576_GMAC_RMII_MODE = 0x1,
+		RK3576_GMAC_RMII_MODE = BIT(3),
 	};
 
 	s_grf = syscon_get_first_range(ROCKCHIP_SYSCON_SDGMAC_GRF);
