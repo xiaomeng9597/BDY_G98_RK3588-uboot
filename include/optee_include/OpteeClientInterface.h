@@ -59,6 +59,14 @@ enum RK_CRYPTO_ALGO {
 	RK_ALGO_ALGO_MAX
 };
 
+enum RK_DICE_TYPE {
+	RK_DICE_UDSCERTS = 0,
+	RK_DICE_CERTCHAIN,
+	RK_DICE_ED25519_PUB,
+	RK_DICE_ED25519_PRI,
+	RK_DICE_MAX
+};
+
 typedef struct {
 	uint32_t	algo;
 	uint32_t	mode;
@@ -83,6 +91,10 @@ typedef struct {
 #define ATTEST_CA_OUT_SIZE     256
 
 void optee_client_init(void);
+uint32_t trusty_set_dice_data(enum RK_DICE_TYPE type,
+			      uint8_t *data, uint32_t data_size);
+uint32_t trusty_get_dice_data(enum RK_DICE_TYPE type,
+			      uint8_t *data, uint32_t *data_size);
 uint32_t trusty_read_rollback_index(uint32_t slot, uint64_t *value);
 uint32_t trusty_write_rollback_index(uint32_t slot, uint64_t value);
 uint32_t trusty_read_permanent_attributes(uint8_t *attributes, uint32_t size);
