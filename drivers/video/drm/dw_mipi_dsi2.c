@@ -1242,6 +1242,8 @@ static int dw_mipi_dsi2_connector_prepare(struct rockchip_connector *conn,
 	struct dw_mipi_dsi2 *dsi2 = dev_get_priv(conn->dev);
 	struct connector_state *conn_state = &state->conn_state;
 	struct crtc_state *cstate = &state->crtc_state;
+	struct rockchip_crtc *crtc = cstate->crtc;
+	const struct rockchip_crtc_funcs *crtc_funcs = crtc->funcs;
 	unsigned long lane_rate;
 
 	memcpy(&dsi2->mode, &conn_state->mode, sizeof(struct drm_display_mode));
@@ -1262,6 +1264,9 @@ static int dw_mipi_dsi2_connector_prepare(struct rockchip_connector *conn,
 	       dsi2->lane_hs_rate, dsi2->c_option ? "Ksps" : "Kbps",
 	       dsi2->slave ? dsi2->lanes * 2 : dsi2->lanes);
 
+	if (crtc_funcs->standby)
+		crtc_funcs->standby(state, 1);
+
 	dw_mipi_dsi2_pre_enable(dsi2);
 
 	return 0;
@@ -1271,16 +1276,28 @@ static void dw_mipi_dsi2_connector_unprepare(struct rockchip_connector *conn,
 					     struct display_state *state)
 {
 	struct dw_mipi_dsi2 *dsi2 = dev_get_priv(conn->dev);
+	struct crtc_state *cstate = &state->crtc_state;
+	struct rockchip_crtc *crtc = cstate->crtc;
+	const struct rockchip_crtc_funcs *crtc_funcs = crtc->funcs;
 
 	dw_mipi_dsi2_post_disable(dsi2);
+
+	if (crtc_funcs->standby)
+		crtc_funcs->standby(state, 0);
 }
 
 static int dw_mipi_dsi2_connector_enable(struct rockchip_connector *conn,
 					 struct display_state *state)
 {
 	struct dw_mipi_dsi2 *dsi2 = dev_get_priv(conn->dev);
+	struct crtc_state *cstate = &state->crtc_state;
+	struct rockchip_crtc *crtc = cstate->crtc;
+	const struct rockchip_crtc_funcs *crtc_funcs = crtc->funcs;
 
 	dw_mipi_dsi2_enable(dsi2);
+
+	if (crtc_funcs->standby)
+		crtc_funcs->standby(state, 0);
 
 	return 0;
 }
@@ -1289,6 +1306,12 @@ static int dw_mipi_dsi2_connector_disable(struct rockchip_connector *conn,
 					  struct display_state *state)
 {
 	struct dw_mipi_dsi2 *dsi2 = dev_get_priv(conn->dev);
+	struct crtc_state *cstate = &state->crtc_state;
+	struct rockchip_crtc *crtc = cstate->crtc;
+	const struct rockchip_crtc_funcs *crtc_funcs = crtc->funcs;
+
+	if (crtc_funcs->standby)
+		crtc_funcs->standby(state, 1);
 
 	dw_mipi_dsi2_disable(dsi2);
 
