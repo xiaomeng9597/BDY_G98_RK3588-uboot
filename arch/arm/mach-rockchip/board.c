@@ -53,8 +53,8 @@
 #include <asm/arch/resource_img.h>
 #include <asm/arch/rk_atags.h>
 #include <asm/arch/vendor.h>
-#ifdef CONFIG_ROCKCHIP_EINK_DISPLAY
-#include <rk_eink.h>
+#ifdef CONFIG_ROCKCHIP_EBOOK_DISPLAY
+#include <rk_ebook.h>
 #endif
 #ifdef CONFIG_ROCKCHIP_MINIDUMP
 #include <rk_mini_dump.h>
@@ -506,8 +506,8 @@ int board_late_init(void)
 		rockchip_show_logo();
 #endif
 
-#ifdef CONFIG_ROCKCHIP_EINK_DISPLAY
-	rockchip_eink_show_uboot_logo();
+#ifdef CONFIG_ROCKCHIP_EBOOK_DISPLAY
+	rockchip_ebook_show_uboot_logo();
 #endif
 #if (CONFIG_ROCKCHIP_BOOT_MODE_REG > 0)
 	setup_boot_mode();
