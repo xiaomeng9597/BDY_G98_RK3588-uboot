@@ -359,7 +359,7 @@ static void spl_setup_relocate(void)
 
 	gd->reloc_off = gd->relocaddr - (unsigned long)__image_copy_start;
 
-	printf("\nRelocate from %08lx to %08lx.\n", (unsigned long)__image_copy_start,
+	printf("\nRelocate from 0x%08lx to 0x%08lx.\n", (unsigned long)__image_copy_start,
 		gd->relocaddr);
 }
 #else
