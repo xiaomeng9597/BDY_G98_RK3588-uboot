@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier:     GPL-2.0+
  */
+#include <amp.h>
 #include <common.h>
 #include <boot_rkimg.h>
 #include <dm.h>
@@ -260,16 +261,34 @@ void board_unset_iomux(enum if_type if_type, int devnum, int routing)
  * @param id: id of MCU, like: bus_mcu, pmu_mcu
  * @param entry_point: entry of firmware, use for address map
  * */
-int fit_standalone_release(char *id, uintptr_t entry_point)
+int fit_standalone_ext_release(char *id, standalone_args_t *args)
 {
 	if (!strcmp(id, "bus_mcu")) {
+		uintptr_t load = args->load;
+		uintptr_t sram_start = args->sram_start;
+		uintptr_t uc_start = args->uc_start;
+		uintptr_t uc_end = args->uc_end;
+
 		/* relative bus m0 jtag / core / biu */
 		writel(0x38003800, TOP_CRU_BASE + TOP_CRU_SOFTRST_CON19);
 
-		/* address map: map 0 to entry_point */
+		/* address map: map 0 to entry_point, 0x20000000 to sram */
 		sip_smc_mcu_config(ROCKCHIP_SIP_CONFIG_BUSMCU_0_ID,
-			ROCKCHIP_SIP_CONFIG_MCU_CODE_START_ADDR,
-			entry_point);
+				   ROCKCHIP_SIP_CONFIG_MCU_CODE_START_ADDR,
+				   load);
+		if (sram_start) {
+			sip_smc_mcu_config(ROCKCHIP_SIP_CONFIG_BUSMCU_0_ID,
+					   ROCKCHIP_SIP_CONFIG_MCU_SRAM_START_ADDR,
+					   sram_start);
+		}
+		if (uc_start && uc_end) {
+			sip_smc_mcu_config(ROCKCHIP_SIP_CONFIG_BUSMCU_0_ID,
+					   ROCKCHIP_SIP_CONFIG_MCU_UNCACHE_START_ADDR,
+					   uc_start);
+			sip_smc_mcu_config(ROCKCHIP_SIP_CONFIG_BUSMCU_0_ID,
+					   ROCKCHIP_SIP_CONFIG_MCU_UNCACHE_END_ADDR,
+					   uc_end);
+		}
 
 		/*
 		* bus m0 configuration:
