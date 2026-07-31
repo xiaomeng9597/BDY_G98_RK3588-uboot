@@ -87,3 +87,10 @@ GTAGS
 *.orig
 *~
 \#*#
+bl31_0x00040000.bin.digest
+bl31_0x00040000.bin.gz
+examples/standalone/rkspi
+go.sh
+tee.bin.digest
+tee.bin.gz
+
