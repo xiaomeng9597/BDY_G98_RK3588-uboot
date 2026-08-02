@@ -10,7 +10,7 @@
 #include <dt-bindings/input/input.h>
 
 / {
-	model = "BYD G98";
+	model = "BYD G98 Compiled By YOUYOUYOU";
 	compatible = "rockchip,rk3588-evb", "rockchip,rk3588";
 
 	aliases {
@@ -335,24 +335,19 @@
 };
 
 /* ========== USB3.0 OTG/Device (Type-C) ========== */
-/* ==========================================================
-	*  USB 修复 - BYD G98
-	*  根因：SoC dtsi 中 DWC3 只绑定了 usb2-phy，缺少 usb3-phy
-	* ========================================================== */
 
-	/* ====== 1. GRF/Syscon 依赖 ====== */
-	&sys_grf { status = "okay"; u-boot,dm-pre-reloc; };
-	&usb_grf { status = "okay"; u-boot,dm-pre-reloc; };
-	&usbdpphy0_grf { status = "okay"; u-boot,dm-pre-reloc; };
-	&usbdpphy1_grf { status = "okay"; u-boot,dm-pre-reloc; };
-	&usb2phy0_grf { status = "okay"; u-boot,dm-pre-reloc; };
-	&usb2phy1_grf { status = "okay"; u-boot,dm-pre-reloc; };
-	&usb2phy2_grf { status = "okay"; u-boot,dm-pre-reloc; };
-	&usb2phy3_grf { status = "okay"; u-boot,dm-pre-reloc; };
-	&vo0_grf { status = "okay"; u-boot,dm-pre-reloc; };
+&sys_grf { status = "okay"; u-boot,dm-pre-reloc; };
+&usb_grf { status = "okay"; u-boot,dm-pre-reloc; };
+&usbdpphy0_grf { status = "okay"; u-boot,dm-pre-reloc; };
+&usbdpphy1_grf { status = "okay"; u-boot,dm-pre-reloc; };
+&usb2phy0_grf { status = "okay"; u-boot,dm-pre-reloc; };
+&usb2phy1_grf { status = "okay"; u-boot,dm-pre-reloc; };
+&usb2phy2_grf { status = "okay"; u-boot,dm-pre-reloc; };
+&usb2phy3_grf { status = "okay"; u-boot,dm-pre-reloc; };
+&vo0_grf { status = "okay"; u-boot,dm-pre-reloc; };
 
-	/* ====== 2. USB2 PHY ====== */
-	&u2phy0 { status = "okay"; u-boot,dm-pre-reloc; };
+
+&u2phy0 { status = "okay"; u-boot,dm-pre-reloc; };
 &u2phy0_otg {
 	phy-supply = <&vcc5v0_otg_regulator>;
 	status = "okay";
