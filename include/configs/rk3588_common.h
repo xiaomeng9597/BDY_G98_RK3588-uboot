@@ -89,7 +89,9 @@
 	"fdt_addr_r=0x08300000\0" \
 	"kernel_addr_r=0x00400000\0" \
 	"kernel_addr_c=0x05480000\0" \
-	"ramdisk_addr_r=0x0a200000\0"
+	"ramdisk_addr_r=0x0a200000\0" \
+	"bootcmd_nvme=echo NVMe boot: pci enum; pci enum; echo NVMe boot: scan; nvme scan; echo NVMe boot: info; nvme info; echo NVMe boot: part 0; nvme part 0; echo NVMe boot: part 1; nvme part 1; setenv devnum 0; if nvme dev 0; then run nvme_boot; fi; setenv devnum 1; if nvme dev 1; then run nvme_boot; fi; echo NVMe boot: no boot script found in NVME; \0" \
+	"nvme_boot=setenv devtype nvme; for distro_bootpart in 1 2 3 4; do for prefix in / /boot/; do for script in boot.scr.uimg boot.scr; do echo Trying nvme ${devnum}:${distro_bootpart} ${prefix}${script}; if test -e nvme ${devnum}:${distro_bootpart} ${prefix}${script}; then echo Found Armbian script ${prefix}${script} on nvme ${devnum}:${distro_bootpart}; load nvme ${devnum}:${distro_bootpart} ${scriptaddr} ${prefix}${script}; source ${scriptaddr}; echo SCRIPT FAILED: continuing...; fi; done; done; done \0"
 
 #include <config_distro_bootcmd.h>
 

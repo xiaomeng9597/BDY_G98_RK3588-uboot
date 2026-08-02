@@ -22,5 +22,8 @@
 #undef CONFIG_BOOTCOMMAND
 #define CONFIG_BOOTCOMMAND RKIMG_BOOTCOMMAND
 
+#undef CONFIG_BOOTCOMMAND
+#define CONFIG_BOOTCOMMAND "run bootcmd_nvme; echo NVMe boot failed; "
+
 #endif
 #endif
