@@ -55,7 +55,7 @@ jobs:
           sudo chown -R runner.runner /builder
           df -Th
 
-      - name: Run Kernel Build in Ubuntu 22.04 container
+      - name: Run UBoot Build in Ubuntu 22.04 container
         working-directory: /builder
         run: |
           pwd
@@ -72,10 +72,10 @@ jobs:
           ls -alh  /builder/release/*
           md5sum /builder/release/*
 
-      - name: Upload Kernel to Release
+      - name: Upload UBOOT to Release
         uses: ncipollo/release-action@main
         with:
-          tag: armbian_rk-6.1-rkr5.1_kernel
+          tag: g98-uboot
           artifacts: /builder/release/*
           allowUpdates: true
           removeArtifacts: false
