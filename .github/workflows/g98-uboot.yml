@@ -71,7 +71,7 @@ jobs:
       - name: Upload UBOOT to Release
         uses: ncipollo/release-action@main
         with:
-          tag: g98-uboot
+          tag: bdy-g98-uboot
           artifacts: /builder/release/*
           allowUpdates: true
           removeArtifacts: false

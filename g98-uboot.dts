@@ -5,7 +5,7 @@
 	interrupt-parent = <0x10000000>;
 	#address-cells = <0x02>;
 	#size-cells = <0x02>;
-	model = "BYD G98 Compiled By YOUYOUYOU";
+	model = "BYD G98 Compiled By yifengyou";
 
 	aliases {
 		ethernet1 = "/pcie@fe170000";
