@@ -83,13 +83,22 @@ jobs:
           removeArtifacts: false
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          body: | # BDY G98 Uboot
+          body: | # BDY G98 U-Boot
 
             ## 发布内容
-            - **uboot.img** - uboot 镜像
+            - **uboot.img** — U-Boot 引导镜像
+
+            ## 适配进展与特性
+
+            | 模块 | 状态 | 说明 |
+            | :--- | :---: | :--- |
+            | **SATA** | ✅ | 可正常识别 SATA 存储设备 |
+            | **NVMe** | ✅ | 双 NVMe M.2 插槽均可识别并启动 |
+            | **USB 3.0** | ✅ | 两个 USB 3.0 端口均工作正常 |
+            | **启动配置** | ✅ | 支持自动扫描 `boot.scr` 和 `extlinux.conf` |
 
             ## 免责声明
             - **按原样提供**：镜像不作任何保证，使用风险自负
-            - **无官方关联**：与猫头鹰微视科技有限公司无官方关系
+            - **无官方关联**：与主板厂商无任何关联
             - **安全提示**：请及时更新补丁、修改默认密码、配置防火墙
 
