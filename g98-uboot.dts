@@ -5215,6 +5215,7 @@
 		pinctrl-0 = <0x100000ac>;
 		reset-gpios = <0x10000023 0x0e 0x00>;
 		vpcie3v3-supply = <0x10000024>;
+		rockchip,bifurcation;
 		rockchip,shared-phy-no-exit;
 		u-boot,dm-pre-reloc;
 
@@ -5260,6 +5261,7 @@
 		pinctrl-0 = <0x100000ae>;
 		reset-gpios = <0x100000af 0x1c 0x00>;
 		vpcie3v3-supply = <0x10000024>;
+		rockchip,bifurcation;
 		rockchip,shared-phy-no-exit;
 		reset-delay-us = <0x186a0>;
 		u-boot,dm-pre-reloc;

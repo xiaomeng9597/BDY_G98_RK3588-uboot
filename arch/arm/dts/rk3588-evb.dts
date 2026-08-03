@@ -227,7 +227,7 @@
 	/* rk3588.dtsi 中已正确定义 phys = <&pcie30phy>，这里不要覆盖 */
 	/* 如果必须显式声明，请使用: phys = <&pcie30phy>; phy-names = "pcie-phy"; */
 
-	/* ★ 关键：共享 PHY 模式下，禁止重复退出/复位 PHY */
+	rockchip,bifurcation;
 	rockchip,shared-phy-no-exit;
 
 	/* MAP1202 DRAM-less SSD 可能需要更长的复位释放延迟 */
@@ -245,7 +245,7 @@
 	reset-gpios = <&gpio4 RK_PB6 GPIO_ACTIVE_HIGH>;
 	vpcie3v3-supply = <&vcc3v3_nvme>;
 
-	/* ★ 关键：共享 PHY 模式下，禁止重复退出/复位 PHY */
+	rockchip,bifurcation;
 	rockchip,shared-phy-no-exit;
 
 	status = "okay";
@@ -403,6 +403,7 @@
 /* ====== 4. DWC3 控制器 ★ 关键修复：添加 USB3 PHY 引用 ====== */
 &usbdrd3_0 {
 	status = "okay";
+	dr_mode = "otg";
 	u-boot,dm-pre-reloc;
 };
 
@@ -418,6 +419,7 @@
 
 &usbdrd3_1 {
 	status = "okay";
+	dr_mode = "host";
 	u-boot,dm-pre-reloc;
 };
 
