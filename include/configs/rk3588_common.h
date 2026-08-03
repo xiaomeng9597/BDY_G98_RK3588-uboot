@@ -90,12 +90,53 @@
 	"kernel_addr_r=0x00400000\0" \
 	"kernel_addr_c=0x05480000\0" \
 	"ramdisk_addr_r=0x0a200000\0" \
-	"bootcmd_nvme=echo NVMe boot: pci enum; pci enum; echo NVMe boot: scan; nvme scan; echo NVMe boot: info; nvme info; echo NVMe boot: part 0; nvme part 0; echo NVMe boot: part 1; nvme part 1; setenv devnum 0; if nvme dev 0; then run nvme_boot; fi; setenv devnum 1; if nvme dev 1; then run nvme_boot; fi; echo NVMe boot: no boot script found in NVME; \0" \
-	"nvme_boot=setenv devtype nvme; for distro_bootpart in 1 2 3 4; do for prefix in / /boot/; do for script in boot.scr.uimg boot.scr; do echo Trying nvme ${devnum}:${distro_bootpart} ${prefix}${script}; if test -e nvme ${devnum}:${distro_bootpart} ${prefix}${script}; then echo Found Armbian script ${prefix}${script} on nvme ${devnum}:${distro_bootpart}; load nvme ${devnum}:${distro_bootpart} ${scriptaddr} ${prefix}${script}; source ${scriptaddr}; echo SCRIPT FAILED: continuing...; fi; done; done; done \0" \
-        "bootcmd_usb=echo USB boot: start; usb start; echo USB boot: info; usb info; setenv devnum 0; if usb dev 0; then run usb_boot; fi; setenv devnum 1; if usb dev 1; then run usb_boot; fi; setenv devnum 2; if usb dev 2; then run usb_boot; fi; setenv devnum 3; if usb dev 3; then run usb_boot; fi; echo USB boot: no boot script found in USB; \0" \
-        "usb_boot=setenv devtype usb; for distro_bootpart in 1 2 3 4; do for prefix in / /boot/; do for script in boot.scr.uimg boot.scr; do echo Trying usb ${devnum}:${distro_bootpart} ${prefix}${script}; if test -e usb ${devnum}:${distro_bootpart} ${prefix}${script}; then echo Found Armbian script ${prefix}${script} on usb ${devnum}:${distro_bootpart}; load usb ${devnum}:${distro_bootpart} ${scriptaddr} ${prefix}${script}; source ${scriptaddr}; echo SCRIPT FAILED: continuing...; fi; done; done; done \0" \
-        "bootcmd_sata=echo SATA boot: init; scsi scan; echo SATA boot: info; scsi info; setenv devnum 0; if scsi dev 0; then run sata_boot; fi; setenv devnum 1; if sata dev 1; then run sata_boot; fi; echo SATA boot: no boot script found in SATA; \0" \
-        "sata_boot=setenv devtype sata; for distro_bootpart in 1 2 3 4; do for prefix in / /boot/; do for script in boot.scr.uimg boot.scr; do echo Trying sata ${devnum}:${distro_bootpart} ${prefix}${script}; if test -e sata ${devnum}:${distro_bootpart} ${prefix}${script}; then echo Found Armbian script ${prefix}${script} on sata ${devnum}:${distro_bootpart}; load sata ${devnum}:${distro_bootpart} ${scriptaddr} ${prefix}${script}; source ${scriptaddr}; echo SCRIPT FAILED: continuing...; fi; done; done; done \0"
+	"try_bootscr_boot=" \
+		"for distro_bootpart in 1 2 3 4; do " \
+			"for prefix in / /boot/; do " \
+				"echo Try ${devtype} ${devnum}:${distro_bootpart} ${prefix}boot.scr; " \
+				"if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}boot.scr; then " \
+					"echo Found boot.scr on ${devtype} ${devnum}:${distro_bootpart}; " \
+					"load ${devtype} ${devnum}:${distro_bootpart} ${scriptaddr} ${prefix}boot.scr; " \
+					"source ${scriptaddr}; " \
+					"echo boot.scr returned, trying next...; " \
+				"fi; " \
+			"done; " \
+		"done; \0" \
+	"try_extlinux_boot=" \
+		"for distro_bootpart in 1 2 3 4; do " \
+			"for extlinux_path in /boot/extlinux/extlinux.conf /extlinux/extlinux.conf /extlinux.conf; do " \
+				"echo Try ${devtype} ${devnum}:${distro_bootpart} ${extlinux_path}; " \
+				"if test -e ${devtype} ${devnum}:${distro_bootpart} ${extlinux_path}; then " \
+					"echo Found extlinux.conf on ${devtype} ${devnum}:${distro_bootpart}; " \
+					"sysboot ${devtype} ${devnum}:${distro_bootpart} ${scriptaddr} ${extlinux_path}; " \
+					"echo sysboot returned, trying next...; " \
+				"fi; " \
+			"done; " \
+		"done; \0" \
+	"boot_one_dev=" \
+		"run try_bootscr_boot; " \
+		"run try_extlinux_boot; \0" \
+	"bootcmd_nvme=" \
+		"echo NVMe: pci enum; pci enum; " \
+		"nvme scan; " \
+		"setenv devtype nvme; " \
+		"setenv devnum 0; if nvme dev 0; then run boot_one_dev; fi; " \
+		"setenv devnum 1; if nvme dev 1; then run boot_one_dev; fi; " \
+		"echo NVMe: no nvme bootable media; \0" \
+	"bootcmd_usb=" \
+		"echo USB: start; usb start; " \
+		"setenv devtype usb; " \
+		"setenv devnum 0; if usb dev 0; then run boot_one_dev; fi; " \
+		"setenv devnum 1; if usb dev 1; then run boot_one_dev; fi; " \
+		"echo USB: no usb bootable media; \0" \
+	"bootcmd_scsi=" \
+		"echo SCSI: scsi scan; scsi scan; " \
+		"setenv devtype scsi; " \
+		"setenv devnum 0; if scsi dev 0; then run boot_one_dev; fi; " \
+		"setenv devnum 1; if scsi dev 1; then run boot_one_dev; fi; " \
+		"echo SCSI: no scsi bootable media; \0" \
+	"bootcmd=run bootcmd_usb; run bootcmd_nvme; run bootcmd_scsi; " \
+		"echo ERROR: No bootable device found; \0"
 
 
 #include <config_distro_bootcmd.h>
