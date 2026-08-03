@@ -1082,6 +1082,62 @@ static void rkusb_fixup_cbwcb(struct fsg_common *common,
 	common->cmnd[1] = 0;
 }
 
+/**
+ * rkusb_cmd_name - 将 rockusb 命令码转换为可读字符串
+ * @cmd: CBW 中的第一个命令字节 (common->cmnd[0])
+ *
+ * 返回: 命令名称字符串，未知命令返回 "UNKNOWN(0xXX)"
+ */
+static const char *rkusb_cmd_name(u8 cmd)
+{
+	switch (cmd) {
+	case RKUSB_TEST_UNIT_READY:	return "TEST_UNIT_READY";
+	case RKUSB_READ_FLASH_ID:	return "READ_FLASH_ID";
+	case RKUSB_TEST_BAD_BLOCK:	return "TEST_BAD_BLOCK";
+	case RKUSB_ERASE_10_FORCE:	return "ERASE_10_FORCE";
+	case RKUSB_LBA_READ_10:		return "LBA_READ_10";
+	case RKUSB_LBA_WRITE_10:	return "LBA_WRITE_10";
+	case RKUSB_READ_FLASH_INFO:	return "READ_FLASH_INFO";
+	case RKUSB_GET_CHIP_VER:	return "GET_CHIP_VER";
+	case RKUSB_LBA_ERASE:		return "LBA_ERASE";
+	case RKUSB_VS_WRITE:		return "VS_WRITE";
+	case RKUSB_VS_READ:		return "VS_READ";
+#ifdef CONFIG_PSTORE
+		case RKUSB_UART_READ:		return "UART_READ";
+#endif
+	case RKUSB_SWITCH_STORAGE:	return "SWITCH_STORAGE";
+	case RKUSB_GET_STORAGE_MEDIA:	return "GET_STORAGE_MEDIA";
+	case RKUSB_READ_CAPACITY:	return "READ_CAPACITY";
+	case RKUSB_SWITCH_USB3:		return "SWITCH_USB3";
+	case RKUSB_RESET:		return "RESET";
+#ifdef CONFIG_ROCKCHIP_OTP
+		case RKUSB_READ_OTP_DATA:	return "READ_OTP_DATA";
+#endif
+		/* 已废弃 / 不支持的命令 */
+	case RKUSB_READ_10:		return "READ_10(DEPRECATED)";
+	case RKUSB_WRITE_10:		return "WRITE_10(DEPRECATED)";
+	case RKUSB_SET_DEVICE_ID:	return "SET_DEVICE_ID(UNSUPPORTED)";
+	case RKUSB_ERASE_10:		return "ERASE_10(UNSUPPORTED)";
+	case RKUSB_WRITE_SPARE:		return "WRITE_SPARE(UNSUPPORTED)";
+	case RKUSB_READ_SPARE:		return "READ_SPARE(UNSUPPORTED)";
+	case RKUSB_GET_VERSION:		return "GET_VERSION(UNSUPPORTED)";
+	case RKUSB_ERASE_SYS_DISK:	return "ERASE_SYS_DISK(UNSUPPORTED)";
+	case RKUSB_SDRAM_READ_10:	return "SDRAM_READ_10(UNSUPPORTED)";
+	case RKUSB_SDRAM_WRITE_10:	return "SDRAM_WRITE_10(UNSUPPORTED)";
+	case RKUSB_SDRAM_EXECUTE:	return "SDRAM_EXECUTE(UNSUPPORTED)";
+	case RKUSB_LOW_FORMAT:		return "LOW_FORMAT(UNSUPPORTED)";
+	case RKUSB_SET_RESET_FLAG:	return "SET_RESET_FLAG(UNSUPPORTED)";
+	case RKUSB_SPI_READ_10:		return "SPI_READ_10(UNSUPPORTED)";
+	case RKUSB_SPI_WRITE_10:	return "SPI_WRITE_10(UNSUPPORTED)";
+	default:			break;
+	}
+
+	/* 使用静态缓冲区避免每次分配，注意非线程安全但 U-Boot 单线程 */
+	static char unknown_buf[20];
+	snprintf(unknown_buf, sizeof(unknown_buf), "UNKNOWN(0x%02X)", cmd);
+	return unknown_buf;
+}
+
 static int rkusb_cmd_process(struct fsg_common *common,
 			     struct fsg_buffhd *bh, int *reply)
 {
@@ -1095,6 +1151,11 @@ static int rkusb_cmd_process(struct fsg_common *common,
 		*reply = -EINVAL;
 		return RKUSB_RC_ERROR;
 	}
+
+	printf("[ROCKUSB] CMD: %-24s | LUN: %u | Tag: 0x%08X\n",
+	       rkusb_cmd_name(common->cmnd[0]),
+	       (unsigned int)common->lun,
+	       le32_to_cpu(cbw->Tag));
 
 	switch (common->cmnd[0]) {
 	case RKUSB_TEST_UNIT_READY:
