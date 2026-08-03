@@ -1,6 +1,9 @@
 name: BDY G98 Uboot Build
 
 on:
+  push:
+    branches:
+      - kdev
   repository_dispatch:
   workflow_dispatch:
     inputs:
