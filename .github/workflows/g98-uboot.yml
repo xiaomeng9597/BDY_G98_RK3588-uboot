@@ -6,14 +6,6 @@ on:
       - kdev
   repository_dispatch:
   workflow_dispatch:
-    inputs:
-      build_type:
-        description: '构建类型'
-        required: false
-        default: 'uboot'
-        type: choice
-        options:
-          - uboot
 
 env:
   TZ: America/New_York
@@ -21,7 +13,6 @@ env:
 
 jobs:
   build-uboot:
-    if: ${{ github.event.inputs.build_type == 'uboot' }}
     runs-on: ubuntu-22.04
 
     steps:
