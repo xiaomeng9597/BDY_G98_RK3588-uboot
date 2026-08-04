@@ -63,9 +63,8 @@ jobs:
           cp -a rk3588_spl_loader_v1.21.114.bin RKDevTool_Release_v3.37
           cp -a uboot.img RKDevTool_Release_v3.37
           ls -alh RKDevTool_Release_v3.37
-          zip -r RKDevTool_Release_v3.37.zip RKDevTool_Release_v3.37/
+          zip -r BYD_G98_UBOOT.zip RKDevTool_Release_v3.37/
           sudo mkdir -p /builder/release
-          sudo cp uboot.img RKDevTool_Release_v3.37.zip /builder/release/
 
       - name: List build output
         run: |
