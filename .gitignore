@@ -95,3 +95,4 @@ tee.bin.digest
 tee.bin.gz
 /bl31_0x*
 /rk3588_spl_loader_v1.21.114.bin
+/dump.txt

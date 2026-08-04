@@ -5584,6 +5584,39 @@
 		};
 	};
 
+	syscon@fd588000 {
+		compatible = "rockchip,rk3588-pmu0-grf\0syscon\0simple-mfd";
+		reg = <0x00 0xfd588000 0x00 0x2000>;
+		status = "okay";
+		u-boot,dm-pre-reloc;
+
+		reboot-mode {
+			status = "okay";
+			compatible = "syscon-reboot-mode";
+			offset = <0x80>;
+			mode-bootloader = <0x5242c301>;
+			mode-charge = <0x5242c30b>;
+			mode-fastboot = <0x5242c309>;
+			mode-loader = <0x5242c301>;
+			mode-normal = <0x5242c300>;
+			mode-maskrom = <0xef08a53c>;
+			mode-recovery = <0x5242c303>;
+			mode-ums = <0x5242c30c>;
+			mode-panic = <0x5242c307>;
+			mode-watchdog = <0x5242c308>;
+			mode-quiescent = <0x5242c30e>;
+			mode-winusb = <0x5242c30f>;
+			u-boot,dm-pre-reloc;
+		};
+	};
+
+	syscon@fd58a000 {
+		status = "okay";
+		u-boot,dm-pre-reloc;
+		compatible = "rockchip,rk3588-pmu1-grf\0syscon";
+		reg = <0x00 0xfd58a000 0x00 0x2000>;
+	};
+
 	vcc5v0-sys {
 		compatible = "regulator-fixed";
 		regulator-always-on;
