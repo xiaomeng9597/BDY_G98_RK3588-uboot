@@ -93,4 +93,4 @@ examples/standalone/rkspi
 go.sh
 tee.bin.digest
 tee.bin.gz
-
+/bl31_0x*

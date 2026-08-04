@@ -206,47 +206,48 @@
 	};
 };
 
-/* PCIe 3.0 x4 对应的 PHY */
-/* RK3588 PCIe 3.0 x4 和 x2 共用此 PHY */
+/* RK3588 PCIe 3.0 x4 和 x2 共用此 PHY pcie30phy: phy@fee80000 */
 &pcie30phy {
 	status = "okay";
+	/* PHY_MODE_PCIE_NANBNB 0 = P1:PCIe3x2  +  P0:PCIe3x2 */
+	rockchip,pcie30-phymode = <PHY_MODE_PCIE_NANBNB>;
 	u-boot,dm-pre-reloc;
-	rockchip,pcie30-phymode = <0>;
 };
 
-/* ===== pcie3x2: pcie@fe160000 (靠近sata口的NVME槽位) ===== */
+/* controller1 pcie3x2: pcie@fe160000 (靠近sata口的NVME槽位)*/
 &pcie3x2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pcie3x2_rst>;
+
 	num-lanes = <2>;
 	max-link-speed = <3>;
+
 	reset-gpios = <&gpio3 RK_PD4 GPIO_ACTIVE_HIGH>;
 	vpcie3v3-supply = <&vcc3v3_nvme>;
 
-	/* ★ 关键修复：恢复使用 pcie30phy，删除错误的 combphy1_ps 引用 */
-	/* rk3588.dtsi 中已正确定义 phys = <&pcie30phy>，这里不要覆盖 */
-	/* 如果必须显式声明，请使用: phys = <&pcie30phy>; phy-names = "pcie-phy"; */
-
 	rockchip,bifurcation;
-	rockchip,shared-phy-no-exit;
 
-	/* MAP1202 DRAM-less SSD 可能需要更长的复位释放延迟 */
 	reset-delay-us = <100000>;
+	rockchip,phy-init-delay-us = <50000>;
 
 	status = "okay";
 	u-boot,dm-pre-reloc;
 };
 
-/* pcie3x4: pcie@fe150000 （靠近CPU的NVME槽位） */
+/* controller0 pcie3x4: pcie@fe150000 （靠近CPU的NVME槽位） */
 &pcie3x4 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pcie3x4_rst>;
+
 	num-lanes = <2>;
+	max-link-speed = <3>;
+
 	reset-gpios = <&gpio4 RK_PB6 GPIO_ACTIVE_HIGH>;
 	vpcie3v3-supply = <&vcc3v3_nvme>;
 
 	rockchip,bifurcation;
-	rockchip,shared-phy-no-exit;
+	rockchip,phy-init-delay-us = <50000>;
+	reset-delay-us = <100000>;
 
 	status = "okay";
 	u-boot,dm-pre-reloc;

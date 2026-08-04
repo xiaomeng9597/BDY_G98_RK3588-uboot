@@ -19,4 +19,6 @@ dtc -I dtb -O dts arch/arm/dts/rk3588-evb.dtb -o g98-uboot.dts
 fdtdump u-boot.dtb > u-boot.dts
 ls -alh g98-uboot.dts u-boot.dts
 
+./make.sh loader
+ls -alh rk3588_spl*.bin
 echo "All ok! All done!"

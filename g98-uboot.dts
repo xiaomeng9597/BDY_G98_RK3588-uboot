@@ -271,6 +271,7 @@
 		#size-cells = <0x02>;
 		ranges;
 		status = "okay";
+		dr_mode = "otg";
 		u-boot,dm-pre-reloc;
 
 		usb@fc000000 {
@@ -4976,6 +4977,7 @@
 		#size-cells = <0x02>;
 		ranges;
 		status = "okay";
+		dr_mode = "host";
 		u-boot,dm-pre-reloc;
 
 		usb@fc400000 {
@@ -5216,7 +5218,8 @@
 		reset-gpios = <0x10000023 0x0e 0x00>;
 		vpcie3v3-supply = <0x10000024>;
 		rockchip,bifurcation;
-		rockchip,shared-phy-no-exit;
+		rockchip,phy-init-delay-us = <0xc350>;
+		reset-delay-us = <0x186a0>;
 		u-boot,dm-pre-reloc;
 
 		legacy-interrupt-controller {
@@ -5262,8 +5265,8 @@
 		reset-gpios = <0x100000af 0x1c 0x00>;
 		vpcie3v3-supply = <0x10000024>;
 		rockchip,bifurcation;
-		rockchip,shared-phy-no-exit;
 		reset-delay-us = <0x186a0>;
+		rockchip,phy-init-delay-us = <0xc350>;
 		u-boot,dm-pre-reloc;
 
 		legacy-interrupt-controller {
@@ -5549,8 +5552,8 @@
 		rockchip,pipe-grf = <0x10000013>;
 		rockchip,phy-grf = <0x100000c1>;
 		status = "okay";
-		u-boot,dm-pre-reloc;
 		rockchip,pcie30-phymode = <0x00>;
+		u-boot,dm-pre-reloc;
 		phandle = <0x100000ab>;
 	};
 
