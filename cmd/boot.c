@@ -63,7 +63,30 @@ U_BOOT_CMD(
 
 static int do_reboot_brom(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
+	u32 reg_val;
+
+	// 1. 读取并打印写入前的寄存器值
+	reg_val = readl(CONFIG_ROCKCHIP_BOOT_MODE_REG);
+	printf("Boot Mode Reg BEFORE write: 0x%08x to reg 0x%08x\n", reg_val, CONFIG_ROCKCHIP_BOOT_MODE_REG);
+
+	// 2. 写入进入 Maskrom 的标志位
 	writel(BOOT_BROM_DOWNLOAD, CONFIG_ROCKCHIP_BOOT_MODE_REG);
+
+	// 3. 增加微小的延时，确保写操作在复位前被硬件完全接收
+	udelay(1000);
+
+	// 4. 读取并打印写入后的寄存器值，验证是否写入成功
+	reg_val = readl(CONFIG_ROCKCHIP_BOOT_MODE_REG);
+	printf("Boot Mode Reg AFTER write:  0x%08x\n", reg_val);
+	printf("Expected value:             0x%08x\n", BOOT_BROM_DOWNLOAD);
+
+	if (reg_val == BOOT_BROM_DOWNLOAD) {
+		printf("DEBUG: Write SUCCESS! Rebooting to Maskrom...\n");
+	} else {
+		printf("DEBUG: Write FAILED! Value mismatch.\n");
+	}
+
+	// 5. 触发系统复位
 	do_reset(NULL, 0, 0, NULL);
 
 	return 0;
