@@ -14,6 +14,7 @@ grep -Ei "SCSI|SATA" .config
 grep -i RTL8169 .config
 grep -i CONFIG_CMD_IMI .config
 grep -i CONFIG_CMD_SETEXPR .config
+grep -i CONFIG_EMBED_KERNEL_DTB .config
 
 dtc -I dtb -O dts arch/arm/dts/rk3588-evb.dtb -o g98-uboot.dts
 fdtdump u-boot.dtb > u-boot.dts
