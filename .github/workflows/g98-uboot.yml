@@ -94,9 +94,16 @@ jobs:
             | **USB 3.0** | ✅ | 两个 USB 3.0 端口均工作正常 |
             | **启动配置** | ✅ | 支持自动扫描 `boot.scr` 和 `extlinux.conf` |
             | **rbrom支持** | ✅ | 支持rbrom进入maskrom模式 |
+            | **存储切换** | ✅ | 支持NVME/SATA/SPI后端存储切换 |
+
+            ## 适配信息
+
+            * 基于 github.com/rockchip-linux/u-boot 2017.09 修改
+            * RKDevTool_Release_v3.37
+            * Rockchip SDK 6.1 rkbin
 
             ## 免责声明
             - **按原样提供**：镜像不作任何保证，使用风险自负
-            - **无官方关联**：与主板厂商无任何关联
+            - **无官方关联**：与任何厂商、任何商业无关联，非盈利、纯粹自由
             - **安全提示**：请及时更新补丁、修改默认密码、配置防火墙
 
