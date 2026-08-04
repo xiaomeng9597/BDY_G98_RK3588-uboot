@@ -1,5 +1,25 @@
 # RV1103B Release Note
 
+## rv1103b_ddr_924MHz{_tb}_v1.06.bin
+
+| Date       | File                              | Build commit | Severity  |
+| ---------- | :-------------------------------- | ------------ | --------- |
+| 2025-10-10 | rv1103b_ddr_924MHz{_tb}_v1.06.bin | b971cce143   | important |
+
+### New
+
+1. Weak pull up UART0M0 RX to prevent it from being switched to JTAG.
+2. Add rzq calibration function.
+
+### Fixed
+
+| Index | Severity  | Update                               | Issue description                                            | Issue source |
+| ----- | --------- | ------------------------------------ | ------------------------------------------------------------ | ------------ |
+| 1     | important | Fixing DDR initialization hang issue | Board with high PLL power supply ripple exhibits intermittent boot hang | -            |
+| 2     | important | Fixing gate training abnormal issue  | Intermittent training result anomaly with boot failure       | -            |
+
+------
+
 ## rv1103b_usbplug_spinand_cont_v1.10.bin
 
 | Date       | File                     | Build commit | Severity  |

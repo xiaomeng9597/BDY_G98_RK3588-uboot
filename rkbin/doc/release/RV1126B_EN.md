@@ -1,5 +1,68 @@
 # rv1126b Release Note
 
+## rv1126b_bl31_v1.13.elf
+
+| Date       | File                  | Build commit | Severity  |
+| ---------- | :-------------------- | ------------ | --------- |
+| 2025-12-10 | rv1126b_bl31_v1.13.elf | be86983f3 | important |
+
+### New
+
+1. Improve the frequency accuracy of RC OSC when system suspend.
+
+------
+
+## rv1126b{p}_ddr_{1332, 1056}MHz_v1.09.bin
+
+| Date       | File                                     | Build commit | Severity |
+| ---------- | :--------------------------------------- | ------------ | -------- |
+| 2025-11-27 | rv1126b{p}_ddr_{1332, 1056}MHz_v1.09.bin | 6d04c3b809   | moderate |
+
+### Fixed
+
+| Index | Severity | Update                                                       | Issue description | Issue source |
+| ----- | -------- | ------------------------------------------------------------ | ----------------- | ------------ |
+| 1     | moderate | Resolve the issue of VOP screen flickering in some scenarios under DDR total bit width of 16bit. | -                 | -            |
+
+------
+
+## rv1126b{p}_ddr_{1332, 1056}MHz_v1.08.bin
+
+| Date       | File                                     | Build commit | Severity  |
+| ---------- | :--------------------------------------- | ------------ | --------- |
+| 2025-11-20 | rv1126b{p}_ddr_{1332, 1056}MHz_v1.08.bin | 1cbce6fa94   | moderate |
+
+### New
+
+1. Support RV1126BM.
+
+------
+
+## rv1126b_bl31_v1.12.elf
+
+| Date       | File                  | Build commit | Severity  |
+| ---------- | :-------------------- | ------------ | --------- |
+| 2025-11-04 | rv1126b_bl31_v1.12.elf | ae491a342 | important |
+
+### New
+
+1. Support 16bit LPDDR4/LPDDR4X for system suspend.
+2. Optimize system resume time.
+
+------
+
+## rv1126b{p}_ddr_{1332, 1056}MHz_v1.07.bin
+
+| Date       | File                                     | Build commit | Severity  |
+| ---------- | :--------------------------------------- | ------------ | --------- |
+| 2025-11-20 | rv1126b{p}_ddr_{1332, 1056}MHz_v1.07.bin | 776cd76d6e   | moderate |
+
+### New
+
+1. Support RV1126BP LPDDR4X.
+
+------
+
 ## rv1126b_spl{, _ipc}_v1.05.bin
 
 | Date       | File                   | Build commit | Severity  |
