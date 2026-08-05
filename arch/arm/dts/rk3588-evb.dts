@@ -103,6 +103,7 @@
 		startup-delay-us = <7500>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&nvme_power_en>;
+		regulator-always-on;
 		u-boot,dm-pre-reloc;
 	};
 

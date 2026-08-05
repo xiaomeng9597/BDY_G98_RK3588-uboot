@@ -5656,6 +5656,7 @@
 		startup-delay-us = <0x1d4c>;
 		pinctrl-names = "default";
 		pinctrl-0 = <0x100000c4>;
+		regulator-always-on;
 		u-boot,dm-pre-reloc;
 		phandle = <0x10000024>;
 	};
