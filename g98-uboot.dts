@@ -28,7 +28,7 @@
 		serial7 = "/serial@feba0000";
 		serial8 = "/serial@febb0000";
 		serial9 = "/serial@febc0000";
-		spi0 = "/spi@feb00000";
+		spi0 = "/spi@fe2b0000";
 		spi1 = "/spi@feb10000";
 		spi2 = "/spi@feb20000";
 		spi3 = "/spi@feb30000";
@@ -1477,6 +1477,7 @@
 		#size-cells = <0x00>;
 		status = "okay";
 		u-boot,dm-spl;
+		u-boot,dm-pre-reloc;
 
 		flash@0 {
 			u-boot,dm-spl;
@@ -1485,6 +1486,7 @@
 			spi-tx-bus-width = <0x01>;
 			spi-rx-bus-width = <0x04>;
 			spi-max-frequency = <0x4c4b400>;
+			status = "disabled";
 		};
 
 		flash@1 {
@@ -1494,7 +1496,10 @@
 			reg = <0x00>;
 			spi-tx-bus-width = <0x01>;
 			spi-rx-bus-width = <0x04>;
-			spi-max-frequency = <0x4c4b400>;
+			spi-max-frequency = <0x5f5e100>;
+			spi-4byte-addressing;
+			broken-flash-reset;
+			u-boot,dm-pre-reloc;
 		};
 	};
 
