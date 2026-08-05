@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  TZ: America/New_York
+  TZ: Asia/Shanghai
   ACTIONS_STEP_DEBUG: true
 
 jobs:
