@@ -766,11 +766,11 @@ static int rockchip_pcie_init_port(struct udevice *dev)
 		ret = rk_pcie_link_up(priv, priv->gen, priv->lanes);
 		if (ret >= 0)
 			return 0;
-		if(priv->vpcie3v3) {
-			regulator_set_enable(priv->vpcie3v3, false);
-			msleep(200);
-			regulator_set_enable(priv->vpcie3v3, true);
-		}
+//		if(priv->vpcie3v3) {
+//			regulator_set_enable(priv->vpcie3v3, false);
+//			msleep(200);
+//			regulator_set_enable(priv->vpcie3v3, true);
+//		}
 	}
 
 	if (retries <= 0)
