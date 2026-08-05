@@ -68,7 +68,19 @@ static int do_reboot_brom(cmd_tbl_t *cmdtp, int flag, int argc, char * const arg
 	reg_val = readl(CONFIG_ROCKCHIP_BOOT_MODE_REG);
 	printf("Boot Mode Reg BEFORE write: 0x%08x to Reg 0x%08x\n", reg_val, CONFIG_ROCKCHIP_BOOT_MODE_REG);
 
-	writel(0xFFFF0000, 0xFD58A004);
+	/*
+	 * These SOC_CON1 regs needs to be cleared before a reset or the
+	 * BOOT_MODE_REG do not retain its value and it is not possible
+	 * to reset to bootrom download mode once TF-A has been started.
+	 *
+	 * TF-A blobs for RK3568 already clear SOC_CON1 for PSCI reset.
+	 * However, the TF-A blobs for RK3588 does not clear SOC_CON1.
+	 */
+	if (IS_ENABLED(CONFIG_ROCKCHIP_RK3568))
+			writel(0x40000, 0xFDC20104);
+	if (IS_ENABLED(CONFIG_ROCKCHIP_RK3588))
+			writel(0xFFFF0000, 0xFD58A004);
+
 	// 2. 写入进入 Maskrom 的标志位
 	writel(BOOT_BROM_DOWNLOAD, CONFIG_ROCKCHIP_BOOT_MODE_REG);
 
