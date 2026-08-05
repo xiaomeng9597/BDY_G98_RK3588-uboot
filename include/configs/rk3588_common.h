@@ -91,7 +91,7 @@
 	"kernel_addr_c=0x05480000\0" \
 	"ramdisk_addr_r=0x0a200000\0" \
 	"try_bootscr_boot=" \
-		"for distro_bootpart in 1 2 3 4; do " \
+		"for distro_bootpart in 1 2 3; do " \
 			"for prefix in / /boot/; do " \
 				"echo Try ${devtype} ${devnum}:${distro_bootpart} ${prefix}boot.scr; " \
 				"if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}boot.scr; then " \
@@ -103,12 +103,12 @@
 			"done; " \
 		"done; \0" \
 	"try_extlinux_boot=" \
-		"for distro_bootpart in 1 2 3 4; do " \
+		"for distro_bootpart in 1 2 3; do " \
 			"for extlinux_path in /boot/extlinux/extlinux.conf /extlinux/extlinux.conf /extlinux.conf; do " \
 				"echo Try ${devtype} ${devnum}:${distro_bootpart} ${extlinux_path}; " \
 				"if test -e ${devtype} ${devnum}:${distro_bootpart} ${extlinux_path}; then " \
 					"echo Found extlinux.conf on ${devtype} ${devnum}:${distro_bootpart}; " \
-					"sysboot ${devtype} ${devnum}:${distro_bootpart} ${scriptaddr} ${extlinux_path}; " \
+					"sysboot ${devtype} ${devnum}:${distro_bootpart} any ${scriptaddr} ${extlinux_path}; " \
 					"echo sysboot returned, trying next...; " \
 				"fi; " \
 			"done; " \
