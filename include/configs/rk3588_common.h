@@ -135,7 +135,12 @@
 		"setenv devnum 0; if scsi dev 0; then run boot_one_dev; fi; " \
 		"setenv devnum 1; if scsi dev 1; then run boot_one_dev; fi; " \
 		"echo SCSI: no scsi bootable media; \0" \
-	"bootcmd=run bootcmd_usb; run bootcmd_nvme; run bootcmd_scsi; " \
+	"bootcmd_emmc=" \
+		"echo EMMC: scanning; " \
+		"setenv devtype mmc; " \
+		"setenv devnum 0; if mmc dev 0; then run boot_one_dev; fi; " \
+		"echo MMC: no emmc bootable media; \0" \
+	"bootcmd=run bootcmd_usb; run bootcmd_emmc; run bootcmd_nvme; run bootcmd_scsi; " \
 		"echo ERROR: No bootable device found; \0"
 
 
