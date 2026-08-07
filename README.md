@@ -81,6 +81,12 @@ USB → eMMC → NVMe → SATA(SCSI)
     - ✅ `发现一个 MASKROM 设备`
     - ✅ `发现一个 LOADER 设备`
    > 💡 **排查提示**：若未识别到设备，请依次检查：USB 线缆/端口是否正常 → 驱动是否正确安装 → 板子是否已成功进入 Maskrom/Loader 模式。
+4. **建议刷MiniLoaderAll**： 当您选择在**MASKROM模式**下刷机，强烈建议先刷一下MiniLoaderAll **，点击 **「高级功能」→「Boot 选择MiniLoaderAll.bin」→「点击下载」**
+
+![](./images/8847927627900.png)
+
+    - ✅ 短接进入maskrom，此时的模式功能不全，需要刷一下MiniLoaderAll补全功能
+    - ✅ MiniLoaderAll 在 BYD_G98_UBOOT.zip 获取
 
 ### ⚙️ 3. 设置默认存储介质（⚡ 关键步骤）
 
@@ -102,7 +108,6 @@ USB → eMMC → NVMe → SATA(SCSI)
 ![](./images/7283575183900.png)
 
 ![](./images/7310379196600.png)
-
 
 1. 确认「默认存储」设置无误后，返回主界面。
 2. 点击 **「执行」** 按钮开始烧录。
