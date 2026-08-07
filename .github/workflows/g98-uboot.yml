@@ -80,21 +80,37 @@ jobs:
           removeArtifacts: false
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          body: | # BDY G98 U-Boot
-
-            ## 发布内容
-            - **uboot.img** — U-Boot 引导镜像
+          body: |
+            # 彼度云G98 UBoot镜像
 
             ## 适配进展与特性
 
             | 模块 | 状态 | 说明 |
             | :--- | :---: | :--- |
-            | **SATA** | ✅ | 可正常识别 SATA 存储设备 |
+            | **SATA** | ✅ | 可正常识别 SATA/SCSI 存储设备 |
             | **NVMe** | ✅ | 双 NVMe M.2 插槽均可识别并启动 |
             | **USB 3.0** | ✅ | 两个 USB 3.0 端口均工作正常 |
+            | **EMMC** | ✅ | 可识别EMMC |
             | **启动配置** | ✅ | 支持自动扫描 `boot.scr` 和 `extlinux.conf` |
             | **rbrom支持** | ✅ | 支持rbrom进入maskrom模式 |
             | **存储切换** | ✅ | 支持NVME/SATA/SPI后端存储切换 |
+
+            ## 默认引导顺序
+
+            **USB->EMMC->NVME->SATA**
+
+            逐个遍历每个存储设备，先找extlinux.conf，再找boot.scr
+            其中 extlinux.conf 的匹配路径是：
+            1. /boot/extlinux/extlinux.conf
+            2. /extlinux/extlinux.conf
+            3. /extlinux.conf
+            其中 boot.scr 的匹配路径是：
+            1. /boot/boot.scr
+            2. /boot.scr
+
+            搜索范围：每种配置文件均只在设备的 分区 1 和 分区 2 中查找。
+            设备遍历：USB / EMMC / NVME / SCSI 各自尝试 devnum 0 和 devnum 1。
+            失败回退：当前设备所有路径均未命中时，自动进入下一优先级设备；全部失败后进入uboot命令行（不会重启）。
 
             ## 适配信息
 
