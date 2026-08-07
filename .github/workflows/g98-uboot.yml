@@ -97,6 +97,8 @@ jobs:
             | **2.5G 网口** | ❌ | RTL8125 暂不支持，网络功能不可用 |
             | **千兆网口** | ❌ | YT9215 驱动未适配，网络功能不可用 |
 
+            🚨 **注意**：当前版本 **不支持任何有线网络**，无法使用 TFTP/NFS 启动或 U-Boot 网络命令。如需网络功能，请等待后续驱动适配。
+
             ## 刷机指引
 
             请参看 [刷机前必看](https://github.com/yifengyou/BDY_G98_RK3588-uboot/blob/kdev/README.md)
@@ -116,9 +118,9 @@ jobs:
             | 1 | `extlinux.conf` | `/boot/extlinux/extlinux.conf` → `/extlinux/extlinux.conf` → `/extlinux.conf` |
             | 2 | `boot.scr` | `/boot/boot.scr` → `/boot.scr` |
 
-            > - **分区范围**：仅搜索设备的 **分区 1** 和 **分区 2**
-            > - **设备遍历**：每类设备尝试 `devnum 0` 和 `devnum 1`
-            > - **匹配逻辑**：先 extlinux 后 boot.scr；extlinux 使用 `sysboot` 解析，boot.scr 使用 `source` 执行
+            - **分区范围**：仅搜索设备的 **分区 1** 和 **分区 2**
+            - **设备遍历**：每类设备尝试 `devnum 0` 和 `devnum 1`
+            - **匹配逻辑**：先 extlinux 后 boot.scr；extlinux 使用 `sysboot` 解析，boot.scr 使用 `source` 执行
 
             ## 适配信息
 
