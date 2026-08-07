@@ -141,6 +141,7 @@
 		"mmc rescan; mmc info; " \
 		"setenv devnum 0; if mmc dev 0; then run boot_one_dev; fi; " \
 		"setenv devnum 1; if mmc dev 0; then run boot_one_dev; fi; " \
+		"setenv devnum 2; if mmc dev 0; then run boot_one_dev; fi; " \
 		"echo EMMC: no emmc bootable media; \0" \
 	"bootcmd=run bootcmd_usb; run bootcmd_emmc; run bootcmd_nvme; run bootcmd_scsi; " \
 		"echo ERROR: No bootable device found; \0"
