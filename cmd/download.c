@@ -20,6 +20,30 @@ static int do_download(cmd_tbl_t *cmdtp, int flag,
 	/* Allow board specific download, maybe noreturn */
 	do_board_download();
 
+#ifdef CONFIG_CMD_USB
+	printf("Download: Scanning USB...\n");
+	run_command("usb start", 0);
+#endif
+
+#ifdef CONFIG_CMD_MMC
+	printf("Download: Scanning EMMC...\n");
+	run_command("mmc rescan", 0);
+	run_command("mmc info", 0);
+#endif
+
+#ifdef CONFIG_CMD_PCI
+	printf("Download: Scanning NVMe...\n");
+	run_command("pci enum", 0);
+#endif
+#ifdef CONFIG_CMD_NVME
+	run_command("nvme scan", 0);
+#endif
+
+#ifdef CONFIG_CMD_SCSI
+	printf("Download: Scanning SCSI...\n");
+	run_command("scsi scan", 0);
+#endif
+
 	/* Generic download */
 #ifdef CONFIG_CMD_ROCKUSB
 	run_command("rockusb 0 $devtype $devnum", 0);
