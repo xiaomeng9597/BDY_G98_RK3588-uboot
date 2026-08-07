@@ -81,45 +81,56 @@ jobs:
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            # 彼度云G98 UBoot镜像
+            # 彼度云 G98 U-Boot 镜像
 
             ## 适配进展与特性
 
             | 模块 | 状态 | 说明 |
             | :--- | :---: | :--- |
-            | **SATA** | ✅ | 可正常识别 SATA/SCSI 存储设备 |
-            | **NVMe** | ✅ | 双 NVMe M.2 插槽均可识别并启动 |
+            | **SATA / SCSI** | ✅ | 可正常识别 SATA/SCSI 存储设备并引导 |
+            | **NVMe** | ✅ | 双 M.2 NVMe 插槽均可识别并引导 |
             | **USB 3.0** | ✅ | 两个 USB 3.0 端口均工作正常 |
-            | **EMMC** | ✅ | 可识别EMMC |
-            | **启动配置** | ✅ | 支持自动扫描 `boot.scr` 和 `extlinux.conf` |
-            | **rbrom支持** | ✅ | 支持rbrom进入maskrom模式 |
-            | **存储切换** | ✅ | 支持NVME/SATA/SPI后端存储切换 |
+            | **eMMC** | ✅ | 可识别 eMMC，启动时输出 `mmc rescan` / `mmc info` 诊断信息 |
+            | **启动配置** | ✅ | 自动扫描 `extlinux.conf` 与 `boot.scr`（Distro Boot） |
+            | **存储后端切换** | ✅ | 支持 NVMe / SATA / SPI Flash 后端存储切换 |
+            | **常用命令** | ✅ | 支持 `rbrom`、`sf`、`scsi`、`nvme`、`mmc` 等调试命令 |
+            | **2.5G 网口** | ❌ | RTL8125 暂不支持，网络功能不可用 |
+            | **千兆网口** | ❌ | YT9215 驱动未适配，网络功能不可用 |
+
+            ## 刷机指引
+
+            请参看 [刷机前必看](https://github.com/yifengyou/BDY_G98_RK3588-uboot/blob/kdev/README.md)
 
             ## 默认引导顺序
 
-            **USB->EMMC->NVME->SATA**
+            ```
+            USB → eMMC → NVMe → SATA(SCSI)
+            ```
 
-            逐个遍历每个存储设备，先找extlinux.conf，再找boot.scr
-            其中 extlinux.conf 的匹配路径是：
-            1. /boot/extlinux/extlinux.conf
-            2. /extlinux/extlinux.conf
-            3. /extlinux.conf
-            其中 boot.scr 的匹配路径是：
-            1. /boot/boot.scr
-            2. /boot.scr
+            对每个存储设备依次执行以下搜索流程，任一命中即启动；未命中则自动回退至下一设备。**全部失败后停留在 U-Boot 命令行**（不会自动重启）。
 
-            搜索范围：每种配置文件均只在设备的 分区 1 和 分区 2 中查找。
-            设备遍历：USB / EMMC / NVME / SCSI 各自尝试 devnum 0 和 devnum 1。
-            失败回退：当前设备所有路径均未命中时，自动进入下一优先级设备；全部失败后进入uboot命令行（不会重启）。
+            ### 搜索策略
+
+            | 优先级 | 配置文件 | 搜索路径 |
+            | :---: | :--- | :--- |
+            | 1 | `extlinux.conf` | `/boot/extlinux/extlinux.conf` → `/extlinux/extlinux.conf` → `/extlinux.conf` |
+            | 2 | `boot.scr` | `/boot/boot.scr` → `/boot.scr` |
+
+            > - **分区范围**：仅搜索设备的 **分区 1** 和 **分区 2**
+            > - **设备遍历**：每类设备尝试 `devnum 0` 和 `devnum 1`
+            > - **匹配逻辑**：先 extlinux 后 boot.scr；extlinux 使用 `sysboot` 解析，boot.scr 使用 `source` 执行
 
             ## 适配信息
 
-            * 基于 github.com/rockchip-linux/u-boot 2017.09 修改
-            * RKDevTool_Release_v3.37
-            * Rockchip SDK 6.1 rkbin
+            | 项目 | 版本 / 来源 |
+            | :--- | :--- |
+            | U-Boot 基线 | [rockchip-linux/u-boot](https://github.com/rockchip-linux/u-boot) 2017.09 |
+            | 烧录工具 | RKDevTool Release v3.37 |
+            | 二进制固件 | Rockchip SDK 6.1 rkbin |
 
             ## 免责声明
-            - **按原样提供**：镜像不作任何保证，使用风险自负
-            - **无官方关联**：与任何厂商、任何商业无关联，非盈利、纯粹自由
-            - **安全提示**：请及时更新补丁、修改默认密码、配置防火墙
+
+            - **按原样提供**：本镜像不作任何明示或暗示的保证，使用风险由用户自行承担。
+            - **无官方关联**：本项目与 Rockchip、彼度云及任何商业实体无关，为非盈利自由分享。
+            - **安全提示**：部署后请及时更新安全补丁、修改默认密码、配置防火墙及访问控制策略。
 
