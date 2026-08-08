@@ -10,8 +10,13 @@
 #include <dt-bindings/input/input.h>
 
 / {
-	model = "BYD G98 Compiled By yifengyou v20260805-01";
+	model = "BYD G98 Compiled By yifengyou";
 	compatible = "rockchip,rk3588-evb", "rockchip,rk3588";
+
+	chosen {
+		stdout-path = &uart2;
+		u-boot,spl-boot-order = &sdhci, &spi_nand, &spi_nor, &sata1;
+	};
 
 	aliases {
 		ethernet0 = &pcie2x1l1;
@@ -157,30 +162,60 @@
 			linux,default-trigger = "heartbeat";
 		};
 	};
+};
 
+// sdhci: mmc@fe2e0000
+&sdhci {
+    bus-width = <8>;
+    no-sdio;
+    no-sd;
+    supports-emmc;
+    non-removable;
+    mmc-hs200-1_8v;
+    /* 仅在确认硬件支持 HS400 时开启以下两行 */
+    mmc-hs400-1_8v;
+    mmc-hs400-enhanced-strobe;
+    supports-cqe;
+    status = "okay";
+    u-boot,dm-pre-reloc;
 
+    pinctrl-names = "default";
+    pinctrl-0 = <&emmc_clk &emmc_cmd &emmc_data_strobe &emmc_bus8>;
 
 };
 
-&sfc {
-	status = "okay";
+// sdmmc: mmc@fe2c0000
+&sdmmc {
+	status = "disabled";
 	u-boot,dm-pre-reloc;
-	flash@0 {
-		status = "disabled";
-	};
+};
 
-	flash@1 {
-		u-boot,dm-spl;
-		compatible = "jedec,spi-nor";
-		label = "sfc_nor";
-		reg = <0x00>;
-		spi-tx-bus-width = <0x01>;
-		spi-rx-bus-width = <0x04>;
-		spi-max-frequency = <0x5f5e100>;
-		spi-4byte-addressing;
-		broken-flash-reset;
+// sdio: mmc@fe2d0000
+&sdio {
+	status = "disabled";
+	u-boot,dm-pre-reloc;
+};
+
+// sfc: spi@fe2b0000
+&sfc {
+		status = "okay";
 		u-boot,dm-pre-reloc;
-	};
+
+		/delete-node/ flash@1;
+
+		spi_nor: flash@0 {
+				u-boot,dm-spl;
+				compatible = "jedec,spi-nor";
+				label = "sfc_nor";
+				reg = <0x00>;
+				spi-tx-bus-width = <0x01>;
+				spi-rx-bus-width = <0x04>;
+				spi-max-frequency = <0x5f5e100>;
+				spi-4byte-addressing;
+				broken-flash-reset;
+				u-boot,dm-pre-reloc;
+		};
+
 };
 
 /* ===== 关键修复：强制激活 GPIO 控制器 ===== */

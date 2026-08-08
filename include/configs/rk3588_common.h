@@ -124,7 +124,7 @@
 		"setenv devnum 1; if nvme dev 1; then run boot_one_dev; fi; " \
 		"echo NVMe: no nvme bootable media; \0" \
 	"bootcmd_usb=" \
-		"echo USB: start; usb start; " \
+		"echo USB: start; usb start; usb info; " \
 		"setenv devtype usb; " \
 		"setenv devnum 0; if usb dev 0; then run boot_one_dev; fi; " \
 		"setenv devnum 1; if usb dev 1; then run boot_one_dev; fi; " \
