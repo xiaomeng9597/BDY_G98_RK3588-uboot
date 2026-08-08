@@ -98,3 +98,4 @@ tee.bin.gz
 /dump.txt
 /parse.txt
 g98-uboot.dts
+/spi_full_disk.img

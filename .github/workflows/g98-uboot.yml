@@ -60,11 +60,15 @@ jobs:
           ./kdev-build.sh
           ls -alh uboot.img
           sha256sum uboot.img
+          # rkdevtool parted type
           cp -a rk3588_spl_loader_v1.21.114.bin RKDevTool_Release_v3.37
           cp -a uboot.img RKDevTool_Release_v3.37
           ls -alh RKDevTool_Release_v3.37
+          # full disk type
+          dd if=uboot.img of=spi_full_disk.img bs=512 seek=8192 count=8192 conv=notrunc
           sudo mkdir -p /builder/release
           sudo zip -r /builder/release/BYD_G98_UBOOT.zip RKDevTool_Release_v3.37
+          sudo cp -a spi_full_disk.img /builder/release/SPI_Full_Disk.img
 
       - name: List build output
         run: |
