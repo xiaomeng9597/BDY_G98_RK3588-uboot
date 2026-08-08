@@ -16,7 +16,7 @@
 | **SATA / SCSI** | ✅ | 可正常识别 SATA/SCSI 存储设备并引导 |
 | **NVMe** | ✅ | 双 M.2 NVMe 插槽均可识别并引导 |
 | **USB 3.0** | ✅ | 两个 USB 3.0 端口均工作正常 |
-| **eMMC** | ✅ | 可识别 eMMC，启动时输出 `mmc rescan` / `mmc info` 诊断信息 |
+| **eMMC** | ❌ | 测试环境没有EMMC，造不出来，谁在成都，给我焊接一个？ |
 | **启动配置** | ✅ | 自动扫描 `extlinux.conf` 与 `boot.scr`（Distro Boot） |
 | **存储后端切换** | ✅ | 支持 NVMe / SATA / SPI Flash 后端存储切换 |
 | **常用命令** | ✅ | 支持 `rbrom`、`sf`、`scsi`、`nvme`、`mmc` 等调试命令 |
