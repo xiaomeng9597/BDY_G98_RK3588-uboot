@@ -166,22 +166,21 @@
 
 // sdhci: mmc@fe2e0000
 &sdhci {
-    bus-width = <8>;
-    no-sdio;
-    no-sd;
-    supports-emmc;
-    non-removable;
-    mmc-hs200-1_8v;
-    /* 仅在确认硬件支持 HS400 时开启以下两行 */
-    mmc-hs400-1_8v;
-    mmc-hs400-enhanced-strobe;
-    supports-cqe;
-    status = "okay";
-    u-boot,dm-pre-reloc;
+	bus-width = <8>;
+	no-sdio;
+	no-sd;
+	supports-emmc;
+	non-removable;
+	mmc-hs200-1_8v;
+	/* 仅在确认硬件支持 HS400 时开启以下两行 */
+	mmc-hs400-1_8v;
+	mmc-hs400-enhanced-strobe;
+	supports-cqe;
+	status = "okay";
+	u-boot,dm-pre-reloc;
 
-    pinctrl-names = "default";
-    pinctrl-0 = <&emmc_clk &emmc_cmd &emmc_data_strobe &emmc_bus8>;
-
+	pinctrl-names = "default";
+	pinctrl-0 = <&emmc_clk &emmc_cmd &emmc_data_strobe &emmc_bus8>;
 };
 
 // sdmmc: mmc@fe2c0000
@@ -198,23 +197,23 @@
 
 // sfc: spi@fe2b0000
 &sfc {
-		status = "okay";
-		u-boot,dm-pre-reloc;
+	status = "okay";
+	u-boot,dm-pre-reloc;
 
-		/delete-node/ flash@1;
+	/delete-node/ flash@1;
 
-		spi_nor: flash@0 {
-				u-boot,dm-spl;
-				compatible = "jedec,spi-nor";
-				label = "sfc_nor";
-				reg = <0x00>;
-				spi-tx-bus-width = <0x01>;
-				spi-rx-bus-width = <0x04>;
-				spi-max-frequency = <0x5f5e100>;
-				spi-4byte-addressing;
-				broken-flash-reset;
-				u-boot,dm-pre-reloc;
-		};
+	spi_nor: flash@0 {
+			u-boot,dm-spl;
+			compatible = "jedec,spi-nor";
+			label = "sfc_nor";
+			reg = <0x00>;
+			spi-tx-bus-width = <0x01>;
+			spi-rx-bus-width = <0x04>;
+			spi-max-frequency = <0x5f5e100>;
+			spi-4byte-addressing;
+			broken-flash-reset;
+			u-boot,dm-pre-reloc;
+	};
 
 };
 
@@ -795,6 +794,4 @@
 	status = "disabled";
 	u-boot,dm-pre-reloc;
 };
-
-
 
