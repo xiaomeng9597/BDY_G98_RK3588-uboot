@@ -144,7 +144,7 @@
 		"setenv devnum 2; if mmc dev 0; then run boot_one_dev; fi; " \
 		"echo EMMC: no emmc bootable media; \0" \
 	"bootcmd=run bootcmd_usb; run bootcmd_nvme; run bootcmd_scsi; " \
-		"echo ERROR: No bootable device found! Enter loader mode; "
+		"echo ERROR: No bootable device found! Enter loader mode; " \
 		"rockusb 0 mtd 2; \0"
 
 
