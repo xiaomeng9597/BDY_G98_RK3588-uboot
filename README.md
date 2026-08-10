@@ -73,54 +73,104 @@ USB → NVMe → SATA(SCSI)
 ## 💾 刷机指引
 
 * 若熟悉瑞星微刷机流程，可使用 SPI_Full_Disk.img 全盘恢复（SPI 32MB）。 支持从0x00000000地址刷写。
-* 若不了解刷机流程，请参看下面操作步骤，绝对能成。
+* 若不了解刷机流程，请参看下面操作步骤
 
+### A. 将UBOOT镜像输入SPI
 
-### 📥 1. 获取固件
+#### 1. 获取uboot镜像和刷机工具
 
 请下载最新发布的 U-Boot 固件包并解压至本地目录（建议路径不含中文或空格）：
 > 🔗 [BDY_G98_RK3588-uboot Releases](https://github.com/yifengyou/BDY_G98_RK3588-uboot/releases/download/bdy-g98-uboot/BYD_G98_UBOOT.zip)
 
-### 🛠️ 2. 环境准备与设备识别
+#### 2. UBOOT刷机流程
 
 1. **启动工具**：运行解压目录中的 `RKDevTool.exe`。
-   > ⚠️ **版本要求**：请务必使用 **v3.37** 版本，其他版本可能无法识别部分功能或分区表。
-2. **连接设备**：设备上电并进入 **MASKROM** 或 **LOADER** 模式。
-3. **确认状态**：检查工具右下角状态栏，确保显示以下任一提示：
-    - ✅ `发现一个 MASKROM 设备`
-    - ✅ `发现一个 LOADER 设备`
-   > 💡 **排查提示**：若未识别到设备，请依次检查：USB 线缆/端口是否正常 → 驱动是否正确安装 → 板子是否已成功进入 Maskrom/Loader 模式。
-4. **建议刷MiniLoaderAll**： 当您选择在**MASKROM模式**下刷机，强烈建议先刷一下MiniLoaderAll **，点击 **「高级功能」→「Boot 选择MiniLoaderAll.bin」→「点击下载」**
 
-![](./images/8847927627900.png)
+2. **短接进入MASKROM模式**：
 
-    - ✅ 短接进入maskrom，此时的模式功能不全，需要刷一下MiniLoaderAll补全功能
-    - ✅ MiniLoaderAll 在 BYD_G98_UBOOT.zip 获取
+![](./images/5828457550700.png)
 
-### ⚙️ 3. 设置默认存储介质（⚡ 关键步骤）
+拆下主板，断电状态下，用镊子短接图上标记的 GND 和 CLK两处。保持不动，上电后，可见RKdevTool显示为"发现一个MASKROM设备**，说明成功进入maskrom模式。
 
-![](./images/7378475380400.png)
+**进入maskrom模式后可以松开短接，不需要一直保持短接状态。**
 
-在 RKDevTool 中点击 **「高级功能」→「获取当前存储」**，根据目标启动方式严格选择对应介质：
+![](./images/6465412025600.png)
 
-| 目标启动方式 | 默认存储选择 | 原理说明 |
-| :--- | :--- | :--- |
-| **SPI NOR 引导** | `SPINOR` | BootROM 直接从 SPI NOR Flash 读取 SPL/U-Boot，需将 IDB 和 U-Boot 写入 SPI Flash。 |
-| **NVMe 引导** | `PCIE` | BootROM 从 SPI NOR Flash 读取 SPL/U-Boot；NVMe 仅作为后续系统盘，引导链起点仍在 SPI Flash。 |
+3. 刷MiniLoaderAll
 
-> ❗ **注意**：此选项决定了 BootROM 的寻址目标，选错将导致设备无法启动。
+点击 **「高级功能」→「Boot 选择MiniLoaderAll.bin」→「点击下载」**
 
-切换方式： 点击 **「高级功能」→「选中目标存储类型」-> 「切换存储」**
+![](./images/6563740128300.png)
 
-### ▶️ 4. 执行烧录
+正常情况下，右侧日志显示"下载成功"
 
-![](./images/7283575183900.png)
+![](./images/6586099522900.png)
 
-![](./images/7310379196600.png)
+4. （可选步骤）确认当前选择的是SPI NOR FLASH
 
-1. 确认「默认存储」设置无误后，返回主界面。
-2. 点击 **「执行」** 按钮开始烧录。
-3. 等待进度条走完，工具提示 **"下载完成"** 即表示烧录成功。
+点击 获取当前存储，显示为 SPINOR，则正常
+
+![](./images/6686139366100.png)
+
+5. 刷Uboot
+
+切换到下载镜像，点击下载即可
+
+![](./images/7121729061800.png)
+
+右侧正常日志输出：
+
+![](./images/7133976246600.png)
+
+右侧正常日志输出：
+
+![](./images/7141461188800.png)
+
+刷机完成，右侧日志显示 ”下载完成“
+
+![](./images/7164566329500.png)
+
+下载完成后系统默认重启。
+
+### B. 刷系统到NVME或SATA
+
+**在刷写A步骤的Uboot后操作，其他Uboot不一定适用当前步骤**
+
+1. 进入Loader模式
+
+断电状态下，按recovery按键，上电。默认会进入loader模式
+
+2. 切换到PCIE（NVME） 或 SATA
+
+点击 **「高级功能」→「选择PCIE」→「点击切换存储」**
+
+![](./images/7868522592400.png)
+
+![](./images/7898939895000.png)
+
+此时读取存储，未报错，标记还是PCIE，则正常
+
+![](./images/7922113146900.png)
+
+
+3.  刷系统
+
+切换到下载镜像，选择所需的镜像，点击下载即可。
+
+
+以armbian nobel为例，下载地址<https://github.com/yifengyou/BDY_G98_RK3588/releases/download/ophub_6.18.y_image/BDY_G98_6.18.y_armbian_noble_xfce_aarch64.rar>
+
+下载后解压，打开解压目录下的 RKDevTool.exe
+
+![](./images/8013889935200.png)
+
+Loader模式下，点击执行即可。
+ 
+![](./images/8151861533900.png)
+
+
+
+
 
 ---
 

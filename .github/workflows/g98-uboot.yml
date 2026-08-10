@@ -69,6 +69,7 @@ jobs:
           sudo mkdir -p /builder/release
           sudo zip -r /builder/release/BYD_G98_UBOOT.zip RKDevTool_Release_v3.37
           sudo cp -a spi_full_disk.img /builder/release/SPI_Full_Disk.img
+          sudo cp Rockchip_DriverAssitant_v5.12.zip /builder/release/
 
       - name: List build output
         run: |
