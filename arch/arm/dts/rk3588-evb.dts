@@ -176,7 +176,7 @@
 	mmc-hs400-1_8v;
 	mmc-hs400-enhanced-strobe;
 	supports-cqe;
-	status = "okay";
+	status = "disabled";
 	u-boot,dm-pre-reloc;
 
 	pinctrl-names = "default";
