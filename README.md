@@ -86,13 +86,15 @@ USB → NVMe → SATA(SCSI)
 
 1. **启动工具**：运行解压目录中的 `RKDevTool.exe`。
 
+![](./images/8819459042300.png)
+
 2. **短接进入MASKROM模式**：
 
 ![](./images/5828457550700.png)
 
-拆下主板，断电状态下，用镊子短接图上标记的 GND 和 CLK两处。保持不动，上电后，可见RKdevTool显示为"发现一个MASKROM设备**，说明成功进入maskrom模式。
+拆下主板，断电状态下，用镊子短接图上标记的 GND 和 CLK两处。保持不动，上电后，可见RKdevTool显示为 "发现一个MASKROM设备"，说明成功进入MASKROM模式。
 
-**进入maskrom模式后可以松开短接，不需要一直保持短接状态。**
+**进入MASKROM模式后可以松开短接，不需要一直保持短接状态。**
 
 ![](./images/6465412025600.png)
 
@@ -112,7 +114,7 @@ USB → NVMe → SATA(SCSI)
 
 ![](./images/6686139366100.png)
 
-5. 刷Uboot
+5. 刷写Uboot
 
 切换到下载镜像，点击下载即可
 
@@ -138,11 +140,14 @@ USB → NVMe → SATA(SCSI)
 
 1. 进入Loader模式
 
-断电状态下，按recovery按键，上电。默认会进入loader模式
+断电状态下，按住recovery按键 （板子上就一个按键，HDMI接口旁边），上电。默认会进入loader模式。
+
+**进入loader模式后，可松开recovery按键，不需要长按**
 
 2. 切换到PCIE（NVME） 或 SATA
 
-点击 **「高级功能」→「选择PCIE」→「点击切换存储」**
+* 若是烧写系统到**NVME盘**， 则 点击 **「高级功能」→「选择PCIE」→「点击切换存储」**
+* 若是烧写系统到**SATA盘**， 则 点击 **「高级功能」→「选择SATA」→「点击切换存储」**
 
 ![](./images/7868522592400.png)
 
@@ -152,24 +157,21 @@ USB → NVMe → SATA(SCSI)
 
 ![](./images/7922113146900.png)
 
+3. 刷系统到NVME 或 SATA
 
-3.  刷系统
+切换到下载镜像，选择所需的镜像。
 
-切换到下载镜像，选择所需的镜像，点击下载即可。
+以Armbian Ubuntu24.04为例：
 
-
-以armbian nobel为例，下载地址<https://github.com/yifengyou/BDY_G98_RK3588/releases/download/ophub_6.18.y_image/BDY_G98_6.18.y_armbian_noble_xfce_aarch64.rar>
+下载地址<https://github.com/yifengyou/BDY_G98_RK3588/releases/download/ophub_6.18.y_image/BDY_G98_6.18.y_armbian_noble_xfce_aarch64.rar>
 
 下载后解压，打开解压目录下的 RKDevTool.exe
 
 ![](./images/8013889935200.png)
 
 Loader模式下，点击执行即可。
- 
+
 ![](./images/8151861533900.png)
-
-
-
 
 
 ---
