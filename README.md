@@ -11,28 +11,30 @@
 
 针对 BDY_G98 硬件平台，已完成以下外设及启动功能的适配：
 
+🚨 **注意**：仅支持有SPI Nor Flash，没有EMMC的设备
+
 | 模块 | 状态 | 说明 |
 | :--- | :---: | :--- |
 | **SATA / SCSI** | ✅ | 可正常识别 SATA/SCSI 存储设备并引导 |
 | **NVMe** | ✅ | 双 M.2 NVMe 插槽均可识别并引导 |
 | **USB 3.0** | ✅ | 两个 USB 3.0 端口均工作正常 |
-| **eMMC** | ❌ | 测试环境没有EMMC，造不出来，谁在成都，给我焊接一个？ |
+| **eMMC** | ❌ |不识别、不支持、默认禁用 |
 | **启动配置** | ✅ | 自动扫描 `extlinux.conf` 与 `boot.scr`（Distro Boot） |
 | **存储后端切换** | ✅ | 支持 NVMe / SATA / SPI Flash 后端存储切换 |
 | **常用命令** | ✅ | 支持 `rbrom`、`sf`、`scsi`、`nvme`、`mmc` 等调试命令 |
 | **2.5G 网口** | ❌ | RTL8125 暂不支持，网络功能不可用 |
 | **千兆网口** | ❌ | YT9215 驱动未适配，网络功能不可用 |
 
-🚨 **注意**：暂不支持EMMC，没有测试条件。已验证两轮未成功，暂时挂起。
+🚨 **注意**：暂不支持EMMC，没有测试条件。不支持EMMC，默认禁用。
 🚨 **注意**：当前版本 **不支持任何有线网络**，无法使用 TFTP/NFS 启动或 U-Boot 网络命令。如需网络功能，请等待后续驱动适配。
 
 ## 🚀 默认启动顺序
 
 ```
-USB → eMMC → NVMe → SATA(SCSI)
+USB → NVMe → SATA(SCSI)
 ```
 
-对每个存储设备依次执行以下搜索流程，任一命中即启动；未命中则自动回退至下一设备。**全部失败后停留在 U-Boot 命令行**（不会自动重启）。
+对每个存储设备依次执行以下搜索流程，任一命中即启动；未命中则自动回退至下一设备。**全部失败后进入Loader模式**。
 
 ### 搜索策略
 
@@ -102,7 +104,7 @@ USB → eMMC → NVMe → SATA(SCSI)
 | 目标启动方式 | 默认存储选择 | 原理说明 |
 | :--- | :--- | :--- |
 | **SPI NOR 引导** | `SPINOR` | BootROM 直接从 SPI NOR Flash 读取 SPL/U-Boot，需将 IDB 和 U-Boot 写入 SPI Flash。 |
-| **NVMe / eMMC 引导** | `EMMC` | BootROM 从 eMMC 读取 SPL/U-Boot；NVMe 仅作为后续系统盘，引导链起点仍在 eMMC。 |
+| **NVMe 引导** | `PCIE` | BootROM 从 SPI NOR Flash 读取 SPL/U-Boot；NVMe 仅作为后续系统盘，引导链起点仍在 SPI Flash。 |
 
 > ❗ **注意**：此选项决定了 BootROM 的寻址目标，选错将导致设备无法启动。
 
