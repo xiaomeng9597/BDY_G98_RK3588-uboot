@@ -22,4 +22,8 @@ ls -alh g98-uboot.dts u-boot.dts
 
 ./make.sh loader
 ls -alh rk3588_spl*.bin
+dd if=uboot.img of=first.img bs=2M count=1
+mv first.img uboot.img
+dumpimage -l uboot.img
+ls -alh uboot.img
 echo "All ok! All done!"
