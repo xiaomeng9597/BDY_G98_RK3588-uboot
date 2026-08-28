@@ -235,6 +235,11 @@ static int _do_env_set(int flag, int argc, char * const argv[], int env_flag)
 	debug("Final value for argc=%d\n", argc);
 	name = argv[1];
 
+	if (strcmp(name, "load_addr") == 0) {
+		printf("Ignoring attempt to modify 'load_addr'\n");
+		return 0;
+	}
+
 	if (strchr(name, '=')) {
 		printf("## Error: illegal character '='"
 		       "in variable name \"%s\"\n", name);

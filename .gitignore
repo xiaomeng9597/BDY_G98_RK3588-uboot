@@ -100,3 +100,4 @@ tee.bin.gz
 g98-uboot.dts
 /spi_full_disk.img
 /output
+/crash

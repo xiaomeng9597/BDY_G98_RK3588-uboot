@@ -90,6 +90,7 @@
 	"kernel_addr_r=0x00400000\0" \
 	"kernel_addr_c=0x05480000\0" \
 	"ramdisk_addr_r=0x0a200000\0" \
+	"load_addr=0x0a000000\0" \
 	"try_bootscr_boot=" \
 		"for distro_bootpart in 1 2 3 4; do " \
 			"for prefix in / /boot/; do " \
