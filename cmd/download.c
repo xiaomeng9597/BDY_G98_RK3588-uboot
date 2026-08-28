@@ -15,7 +15,12 @@ __weak void do_board_download(void)
 static int do_download(cmd_tbl_t *cmdtp, int flag,
 		       int argc, char * const argv[])
 {
+
+
 	disable_ctrlc(1);
+
+	printf("-> Enter recovery mode\n");
+	run_command("run bootcmd_recovery", 0);
 
 	/* Allow board specific download, maybe noreturn */
 	do_board_download();

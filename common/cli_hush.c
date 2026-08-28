@@ -2163,6 +2163,11 @@ int set_local_var(const char *s, int flg_export)
 	int result=0;
 	struct variables *cur;
 
+	if (!s || !*s) {
+		printf("Error: local var list is NULL");
+		return -1;
+	}
+
 #ifdef __U_BOOT__
 	/* might be possible! */
 	if (!isalpha(*s))
