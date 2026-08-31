@@ -297,7 +297,7 @@ int write_mbr_partition(struct blk_desc *dev_desc, void *buf)
 	return 0;
 }
 
-U_BOOT_PART_TYPE(dos) = {
+U_BOOT_PART_TYPE(a_dos) = {
 	.name		= "DOS",
 	.part_type	= PART_TYPE_DOS,
 	.max_entries	= DOS_ENTRY_NUMBERS,
