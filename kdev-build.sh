@@ -25,11 +25,6 @@ dd if=uboot.img of=output/uboot-g98_only-spi.img bs=2M count=1
 dumpimage -l output/uboot-g98_only-spi.img
 ls -alh output/uboot-g98_only-spi.img
 
-cp -a output/rk3588_spl_loader_v1.21.114_only-spi.bin RKDevTool_Release_v3.37/rk3588_spl_loader_v1.21.114.bin
-cp -a output/uboot-g98_only-spi.img RKDevTool_Release_v3.37/uboot.img
-ls -alh RKDevTool_Release_v3.37
-zip -r output/BYD_G98_UBOOT_ONLY-SPI.zip RKDevTool_Release_v3.37
-
 # only emmc
 rm -f uboot.img arch/arm/dts/rk3588-evb.dtb
 cp -a only-emmc/rk3588-evb.dts arch/arm/dts/rk3588-evb.dts
@@ -48,11 +43,6 @@ mv rk3588_spl_loader_v1.21.114.bin output/rk3588_spl_loader_v1.21.114_only-emmc.
 dd if=uboot.img of=output/uboot-g98_only-emmc.img bs=2M count=1
 dumpimage -l output/uboot-g98_only-emmc.img
 ls -alh output/uboot-g98_only-emmc.img
-
-cp -a output/rk3588_spl_loader_v1.21.114_only-emmc.bin RKDevTool_Release_v3.37/rk3588_spl_loader_v1.21.114.bin
-cp -a output/uboot-g98_only-emmc.img RKDevTool_Release_v3.37/uboot.img
-ls -alh RKDevTool_Release_v3.37
-zip -r output/BYD_G98_UBOOT_ONLY-EMMC.zip RKDevTool_Release_v3.37
 
 # show output
 ls -alh output/*
