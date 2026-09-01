@@ -346,8 +346,8 @@ void setup_download_mode(void)
 			/* try rockusb download and brom download */
 			run_command("download", 0);
 		} else {
-			printf("entering recovery mode!\n");
-			env_set("reboot_mode", "recovery-key");
+			printf("entering kdev recovery mode!\n");
+			run_command("run bootcmd_recovery", 0);
 		}
 	} else if (is_hotkey(HK_FASTBOOT)) {
 		env_set("reboot_mode", "fastboot");
