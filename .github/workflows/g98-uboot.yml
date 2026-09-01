@@ -62,8 +62,6 @@ jobs:
           sudo mkdir -p /builder/release
           sudo cp output/* /builder/release
 
-          sudo cp Rockchip_DriverAssitant_v5.12.zip /builder/release/
-
       - name: List build output
         run: |
           ls -alh  /builder/release/*
