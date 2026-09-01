@@ -79,12 +79,12 @@ jobs:
           body: |
             # 彼度云 G98 SPI U-Boot 镜像
 
-            由于 SPI Flash 与 eMMC（需自行焊接 eMMC 芯片） 共用硬件引脚，二者存在物理冲突，设备仅能选择其中一种作为启动介质。出厂默认仅配备 SPI Flash，未焊接 eMMC。
+            出厂默认仅配备 SPI Nor Flash，未焊接 eMMC。由于 SPI Flash 与 eMMC共用硬件引脚，二者存在物理冲突，设备仅能选择其中一种作为启动介质。
 
             ##  引导方式选择与操作指引
 
             * 如果是**SPI引导**，请查看使用说明： [SPI recovery固件刷写](https://github.com/yifengyou/BDY_G98_RK3588/blob/master/docs/%E5%88%B7%E6%9C%BA%E6%8C%87%E5%BC%95/spi_recovery.md)
-            * 如果是**EMMC引导**，请查看使用说明：[EMMC recovery固件刷写](https://github.com/yifengyou/BDY_G98_RK3588/blob/master/docs/%E5%88%B7%E6%9C%BA%E6%8C%87%E5%BC%95/spi_emmc.md)
+            * 如果是**EMMC引导**，请查看使用说明：[EMMC recovery固件刷写](https://github.com/yifengyou/BDY_G98_RK3588/blob/master/docs/%E5%88%B7%E6%9C%BA%E6%8C%87%E5%BC%95/emmc_recovery.md)
 
             ## 免责声明
 
